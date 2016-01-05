@@ -14,8 +14,18 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+private slots:
+    void open();
 private:
+    void createActions();
+    void createMenus();
+
+
+    QMenu* fileMenu;
+
+    QAction* openAction;
+    QAction* exitAction;
+
     Ui::MainWindow *ui;
 };
 
