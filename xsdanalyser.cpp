@@ -1,10 +1,14 @@
 #include "xsdanalyser.h"
 #include<QFile>
 #include<QDebug>
+#include"date/alldatetype.h"
+#include<QStack>
 
 XsdAnalyser::XsdAnalyser()
 {
     model=new QStandardItemModel();
+    root=new Date(0);
+    p=root;
 }
 
 bool XsdAnalyser::analyse(const QString &fileName)
@@ -19,61 +23,115 @@ bool XsdAnalyser::analyse(const QString &fileName)
 
     reader.setDevice(&file);
 
-    reader.readNext();
-    while (!reader.atEnd())
+    QStack<QString> stack;
+    stack.push(QString("element"));
+
+    while(!reader.atEnd())
     {
-        if(reader.isStartElement())
+        reader.readNextStartElement();
+        QString temp=reader.name().toString();
+
+        QString top=stack.top();
+
+        if(temp==stack.top())
         {
-            qDebug()<<reader.name()<<endl;
-            if(reader.name()=="complexType")
-            {
-                if(!analyseComplexType())
-                {
-                    qDebug()<<"analyse complexType fail"<<endl;
-                    return false;
-                }
-            }
-            else if(reader.name()=="simpleType")
-            {
-                if(!analyseSimpleType())
-                {
-                    qDebug()<<"analyse simpleType fail"<<endl;
-                    return false;
-                }
-            }
-            reader.readNext();
+            stack.pop();
+            if(temp=="element"
+                    ||temp=="complexType"
+                    ||temp=="simpleType")
+                p=p->getParent();
         }
         else
         {
-            reader.readNext();
+            stack.push(temp);
+            parse(temp,p);
         }
     }
-    if (reader.hasError())
-    {
-        qDebug()<<fileName<<" has error"<<endl;
-        return false;
-    }
 
-    //test
-    QStandardItem *parentItem = model->invisibleRootItem();
-    for (int i = 0; i < 4; ++i)
-    {
-        QStandardItem *item = new QStandardItem(QString("item %0").arg(i));
-        parentItem->appendRow(item);
-    }
-    //test
+    QStandardItem* itemRoot=model->invisibleRootItem();
+
+    buildTreeModel(root,itemRoot);
 
     file.close();
     return true;
 }
 
-bool XsdAnalyser::analyseComplexType()
+bool XsdAnalyser::analyseComplexType(Date *parent)
 {
+    CompletxType* t=new CompletxType(parent);
+    t->setName(reader.attributes().value("name").toString());
+
+    parent->addChild(t);
+
+    p=t;
+
     return true;
 }
 
-bool XsdAnalyser::analyseSimpleType()
+bool XsdAnalyser::analyseSimpleType(Date *parent)
 {
+    SimpleType* t=new SimpleType(parent);
+    t->setName(reader.attributes().value("name").toString());
+
+    parent->addChild(t);
+
+    p=t;
+
     return true;
 }
 
+bool XsdAnalyser::analyseElement(Date* parent)
+{
+    Element* t=new Element(parent);
+    t->setName(reader.attributes().value("name").toString());
+    t->setId(reader.attributes().value("id").toString());
+    t->setType(reader.attributes().value("type").toString());
+
+    parent->addChild(t);
+
+    p=t;
+
+    return true;
+}
+
+bool XsdAnalyser::parse(const QString &type, Date *parent)
+{
+    if(type=="complexType")
+    {
+        if(!analyseComplexType(parent))
+        {
+            qDebug()<<"analyse complexType fail"<<endl;
+            return false;
+        }
+    }
+    else if(type=="simpleType")
+    {
+        if(!analyseSimpleType(parent))
+        {
+            qDebug()<<"analyse simpleType fail"<<endl;
+            return false;
+        }
+    }
+    else if(type=="element")
+    {
+        if(!analyseElement(parent))
+        {
+            qDebug()<<"analyse element fail"<<endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+void XsdAnalyser::buildTreeModel(Date *root, QStandardItem *itemRoot)
+{
+    for(int i=0;i<root->getChild().size();i++)
+    {
+        Date* t=root->getChild().at(i);
+        QStandardItem *item = new QStandardItem(QString(t->getName()));
+        item->setCheckable(true);
+        itemRoot->appendRow(item);
+
+        buildTreeModel(t,item);
+    }
+}

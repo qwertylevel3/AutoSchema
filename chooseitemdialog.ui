@@ -15,13 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QTreeWidget" name="treeWidget">
-     <column>
-      <property name="text">
-       <string notr="true">1</string>
-      </property>
-     </column>
-    </widget>
+    <widget class="QTreeView" name="treeView"/>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">

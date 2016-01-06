@@ -17,11 +17,20 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     chooseitemdialog.cpp \
-    xsdanalyser.cpp
+    xsdanalyser.cpp \
+    date/date.cpp \
+    date/completxtype.cpp \
+    date/simpletype.cpp \
+    date/element.cpp
 
 HEADERS  += mainwindow.h \
     chooseitemdialog.h \
-    xsdanalyser.h
+    xsdanalyser.h \
+    date/date.h \
+    date/completxtype.h \
+    date/simpletype.h \
+    date/element.h \
+    date/alldatetype.h
 
 FORMS    += mainwindow.ui \
     chooseitemdialog.ui

@@ -4,6 +4,8 @@
 #include<QXmlStreamReader>
 #include<QStandardItemModel>
 
+class Date;
+
 class XsdAnalyser
 {
 public:
@@ -11,12 +13,18 @@ public:
     bool analyse(const QString& fileName);
     QStandardItemModel* getModel(){return model;}
 protected:
-    bool analyseComplexType();
-    bool analyseSimpleType();
+    bool analyseComplexType(Date* parent);
+    bool analyseSimpleType(Date* parent);
+    bool analyseElement(Date* parent);
+    bool parse(const QString& type,Date* parent);
 
+    void buildTreeModel(Date* root,QStandardItem* itemRoot);
+
+    Date* root;
+    Date* p;
+    Date* current;
     QStandardItemModel* model;
     QXmlStreamReader reader;
-
 
 };
 
