@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include<QXmlSchema>
+#include<xsdanalyser.h>
 
 namespace Ui {
 class MainWindow;
@@ -19,12 +21,15 @@ private slots:
 private:
     void createActions();
     void createMenus();
+    bool parseXsd(const QString& fileName);
 
 
     QMenu* fileMenu;
 
     QAction* openAction;
     QAction* exitAction;
+
+    XsdAnalyser analyser;
 
     Ui::MainWindow *ui;
 };

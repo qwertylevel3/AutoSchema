@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include<QFileDialog>
+#include<QDebug>
+#include<QXmlStreamReader>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,7 +26,9 @@ void MainWindow::open()
                                                   tr("xsd files(*.xsd)"));
     if(!fileName.isEmpty())
     {
+        parseXsd(fileName);
 
+        ui->treeView->setModel(analyser.getModel());
     }
 }
 
@@ -48,4 +52,10 @@ void MainWindow::createMenus()
     fileMenu->addAction(openAction);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
+}
+
+bool MainWindow::parseXsd(const QString &fileName)
+{
+    analyser.analyse(fileName);
+    return true;
 }
