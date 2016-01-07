@@ -3,9 +3,13 @@
 #include<QDebug>
 #include"date/alldatetype.h"
 #include<QStack>
+#include<QQueue>
 
 XsdAnalyser::XsdAnalyser()
 {
+    model=0;
+    root=0;
+
     init();
 }
 
@@ -54,16 +58,41 @@ bool XsdAnalyser::analyse(const QString &fileName)
     return true;
 }
 
+QStandardItemModel *XsdAnalyser::getIndexModel()
+{
+    setIndexCheckState(root);
+    setIndexShowState(root);
+    return model;
+}
+
+QStandardItemModel *XsdAnalyser::getResultModel()
+{
+    setResultCheckState(root);
+    setResultShowState(root);
+    return model;
+}
+
+void XsdAnalyser::updateIndexDate()
+{
+    updateIndex(root);
+}
+
+void XsdAnalyser::updateResultDate()
+{
+    updateResult(root);
+}
+
 void XsdAnalyser::init()
 {
-    if(model)
-    {
-        delete model;
-    }
     if(root)
     {
         delete root;
     }
+    if(model)
+    {
+        delete model;
+    }
+
     model=new QStandardItemModel();
     root=new Date();
     model->appendRow(root);
@@ -75,6 +104,7 @@ bool XsdAnalyser::analyseComplexType(Date *parent)
     CompletxType* t=new CompletxType();
     t->setName(reader.attributes().value("name").toString());
     t->setText(t->getName());
+
     parent->addChild(t);
 
     p=t;
@@ -102,6 +132,7 @@ bool XsdAnalyser::analyseElement(Date* parent)
     t->setId(reader.attributes().value("id").toString());
     t->setType(reader.attributes().value("type").toString());
     t->setText(t->getName());
+
     parent->addChild(t);
 
     p=t;
@@ -137,3 +168,100 @@ bool XsdAnalyser::parse(const QString &type, Date *parent)
     }
     return true;
 }
+
+void XsdAnalyser::setIndexCheckState(Date *r)
+{
+    if(r->isIndexChecked() && r->isCheckable())
+    {
+        r->setCheckState(Qt::Checked);
+
+    }
+    else if(r->isCheckable())
+    {
+        r->setCheckState(Qt::Unchecked);
+    }
+
+    for(int i=0;i<r->rowCount();i++)
+    {
+        setIndexCheckState(static_cast<Date*>(r->child(i)));
+    }
+}
+
+void XsdAnalyser::setIndexShowState(Date *r)
+{
+    r->setEnabled(true);
+    for(int i=0;i<r->rowCount();i++)
+    {
+        setIndexShowState(static_cast<Date*>(r->child(i)));
+    }
+}
+
+void XsdAnalyser::setResultCheckState(Date *r)
+{
+    if(r->isResultChecked() && r->isCheckable())
+    {
+        r->setCheckState(Qt::Checked);
+    }
+    else if(r->isCheckable())
+    {
+        r->setCheckState(Qt::Unchecked);
+    }
+
+    for(int i=0;i<r->rowCount();i++)
+    {
+        setResultCheckState(static_cast<Date*>(r->child(i)));
+    }
+}
+
+void XsdAnalyser::setResultShowState(Date *r)
+{
+    if(r->isIndexChecked())
+    {
+        r->setEnabled(true);
+    }
+    else if(r->isCheckable())
+    {
+        r->setEnabled(false);
+    }
+    for(int i=0;i<r->rowCount();i++)
+    {
+        setResultShowState(static_cast<Date*>(r->child(i)));
+    }
+}
+
+//从index页离开时更新
+void XsdAnalyser::updateIndex(Date *r)
+{
+    if(r->checkState()==Qt::Checked && r->isCheckable())
+    {
+        r->indexCheck(true);
+    }
+    else if(r->isCheckable())
+    {
+        r->indexCheck(false);
+    }
+    for(int i=0;i<r->rowCount();i++)
+    {
+
+        updateIndex(static_cast<Date*>(r->child(i)));
+    }
+}
+//从result页离开时更新
+void XsdAnalyser::updateResult(Date *r)
+{
+    if(r->checkState()==Qt::Checked
+            && r->isEnabled()
+            && r->isCheckable())
+    {
+        r->resultCheck(true);
+    }
+    else
+    {
+        r->resultCheck(false);
+    }
+    for(int i=0;i<r->rowCount();i++)
+    {
+        updateResult(static_cast<Date*>(r->child(i)));
+    }
+}
+

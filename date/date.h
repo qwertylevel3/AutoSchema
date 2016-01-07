@@ -19,8 +19,8 @@ public:
     void setName(const QString& n){name=n;}
     void addAnnotation(const QString& a){annotation.push_back(a);}
     void addChild(Date* d){appendRow(d);}
-    void indexCheck(bool c){indexChecked=c;}
-    void resultCheck(bool r){resultChecked=r;}
+    void indexCheck(bool c);
+    void resultCheck(bool c);
     void setTableNo(int n){tableNo=n;}
 protected:
     QString name;

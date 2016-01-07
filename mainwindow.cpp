@@ -12,6 +12,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createActions();
     createMenus();
+
+    setTab(0);
+
+    connect(ui->indexToResultButton,SIGNAL(clicked(bool)),
+            this,SLOT(indexToResult()));
+    connect(ui->resultToShowDetailButton,SIGNAL(clicked(bool)),
+            this,SLOT(resultToShowDetail()));
+    connect(ui->resultToIndexButton,SIGNAL(clicked(bool)),
+            this,SLOT(resultToindex()));
+    connect(ui->showDetailToResultButton,SIGNAL(clicked(bool)),
+            this,SLOT(showDetailToResult()));
+    connect(ui->completeButton,SIGNAL(clicked(bool)),
+            this,SLOT(complete()));
 }
 
 MainWindow::~MainWindow()
@@ -28,8 +41,38 @@ void MainWindow::open()
     {
         parseXsd(fileName);
 
-        ui->treeView->setModel(analyser.getModel());
+        ui->treeView->setModel(analyser.getIndexModel());
     }
+}
+
+void MainWindow::indexToResult()
+{
+    analyser.updateIndexDate();
+    setTab(1);
+    ui->resultTreeView->setModel(analyser.getResultModel());
+}
+
+void MainWindow::resultToShowDetail()
+{
+    analyser.updateResultDate();
+    setTab(2);
+}
+
+void MainWindow::resultToindex()
+{
+    analyser.updateResultDate();
+    setTab(0);
+    ui->treeView->setModel(analyser.getIndexModel());
+}
+
+void MainWindow::showDetailToResult()
+{
+    setTab(1);
+}
+
+void MainWindow::complete()
+{
+
 }
 
 void MainWindow::createActions()
@@ -58,4 +101,20 @@ bool MainWindow::parseXsd(const QString &fileName)
 {
     analyser.analyse(fileName);
     return true;
+}
+
+void MainWindow::setTab(int index)
+{
+    if(index<0 || index >2)
+    {
+        return;
+    }
+    ui->mainTableWidget->setTabEnabled(0,false);
+    ui->mainTableWidget->setTabEnabled(1,false);
+    ui->mainTableWidget->setTabEnabled(2,false);
+
+    ui->mainTableWidget->setTabEnabled(index,true);
+    ui->mainTableWidget->setCurrentIndex(index);
+
+
 }

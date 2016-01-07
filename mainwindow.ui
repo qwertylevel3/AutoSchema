@@ -16,9 +16,9 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="mainTableWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="index">
        <attribute name="title">
@@ -44,7 +44,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QCommandLinkButton" name="nextButton">
+           <widget class="QCommandLinkButton" name="indexToResultButton">
             <property name="maximumSize">
              <size>
               <width>120</width>
@@ -70,7 +70,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QListView" name="listView"/>
+         <widget class="QTreeView" name="resultTreeView"/>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -88,7 +88,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QCommandLinkButton" name="nextButton_3">
+           <widget class="QCommandLinkButton" name="resultToIndexButton">
             <property name="maximumSize">
              <size>
               <width>120</width>
@@ -105,7 +105,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QCommandLinkButton" name="nextButton_2">
+           <widget class="QCommandLinkButton" name="resultToShowDetailButton">
             <property name="maximumSize">
              <size>
               <width>100</width>
@@ -165,7 +165,7 @@
            <widget class="QCommandLinkButton" name="deleteTabButton">
             <property name="maximumSize">
              <size>
-              <width>100</width>
+              <width>120</width>
               <height>16777215</height>
              </size>
             </property>
@@ -192,7 +192,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QCommandLinkButton" name="nextButton_4">
+           <widget class="QCommandLinkButton" name="showDetailToResultButton">
             <property name="maximumSize">
              <size>
               <width>100</width>
@@ -209,7 +209,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QCommandLinkButton" name="commandLinkButton">
+           <widget class="QCommandLinkButton" name="completeButton">
             <property name="maximumSize">
              <size>
               <width>100</width>

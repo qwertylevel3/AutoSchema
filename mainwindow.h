@@ -18,10 +18,16 @@ public:
     ~MainWindow();
 private slots:
     void open();
+    void indexToResult();
+    void resultToShowDetail();
+    void resultToindex();
+    void showDetailToResult();
+    void complete();
 private:
     void createActions();
     void createMenus();
     bool parseXsd(const QString& fileName);
+    void setTab(int index);
 
 
     QMenu* fileMenu;

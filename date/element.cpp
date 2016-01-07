@@ -2,6 +2,6 @@
 
 Element::Element()
 {
-
+    setCheckable(true);
 }
 
