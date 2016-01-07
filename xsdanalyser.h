@@ -13,16 +13,14 @@ public:
     bool analyse(const QString& fileName);
     QStandardItemModel* getModel(){return model;}
 protected:
+    void init();
     bool analyseComplexType(Date* parent);
     bool analyseSimpleType(Date* parent);
     bool analyseElement(Date* parent);
     bool parse(const QString& type,Date* parent);
 
-    void buildTreeModel(Date* root,QStandardItem* itemRoot);
-
-    Date* root;
     Date* p;
-    Date* current;
+    Date* root;
     QStandardItemModel* model;
     QXmlStreamReader reader;
 

@@ -6,9 +6,7 @@
 
 XsdAnalyser::XsdAnalyser()
 {
-    model=new QStandardItemModel();
-    root=new Date(0);
-    p=root;
+    init();
 }
 
 bool XsdAnalyser::analyse(const QString &fileName)
@@ -22,6 +20,8 @@ bool XsdAnalyser::analyse(const QString &fileName)
     }
 
     reader.setDevice(&file);
+
+    init();
 
     QStack<QString> stack;
     stack.push(QString("element"));
@@ -39,7 +39,7 @@ bool XsdAnalyser::analyse(const QString &fileName)
             if(temp=="element"
                     ||temp=="complexType"
                     ||temp=="simpleType")
-                p=p->getParent();
+                p=static_cast<Date*>(p->parent());
         }
         else
         {
@@ -48,19 +48,33 @@ bool XsdAnalyser::analyse(const QString &fileName)
         }
     }
 
-    QStandardItem* itemRoot=model->invisibleRootItem();
 
-    buildTreeModel(root,itemRoot);
 
     file.close();
     return true;
 }
 
+void XsdAnalyser::init()
+{
+    if(model)
+    {
+        delete model;
+    }
+    if(root)
+    {
+        delete root;
+    }
+    model=new QStandardItemModel();
+    root=new Date();
+    model->appendRow(root);
+    p=root;
+}
+
 bool XsdAnalyser::analyseComplexType(Date *parent)
 {
-    CompletxType* t=new CompletxType(parent);
+    CompletxType* t=new CompletxType();
     t->setName(reader.attributes().value("name").toString());
-
+    t->setText(t->getName());
     parent->addChild(t);
 
     p=t;
@@ -70,8 +84,9 @@ bool XsdAnalyser::analyseComplexType(Date *parent)
 
 bool XsdAnalyser::analyseSimpleType(Date *parent)
 {
-    SimpleType* t=new SimpleType(parent);
+    SimpleType* t=new SimpleType();
     t->setName(reader.attributes().value("name").toString());
+    t->setText(t->getName());
 
     parent->addChild(t);
 
@@ -82,11 +97,11 @@ bool XsdAnalyser::analyseSimpleType(Date *parent)
 
 bool XsdAnalyser::analyseElement(Date* parent)
 {
-    Element* t=new Element(parent);
+    Element* t=new Element();
     t->setName(reader.attributes().value("name").toString());
     t->setId(reader.attributes().value("id").toString());
     t->setType(reader.attributes().value("type").toString());
-
+    t->setText(t->getName());
     parent->addChild(t);
 
     p=t;
@@ -121,17 +136,4 @@ bool XsdAnalyser::parse(const QString &type, Date *parent)
         }
     }
     return true;
-}
-
-void XsdAnalyser::buildTreeModel(Date *root, QStandardItem *itemRoot)
-{
-    for(int i=0;i<root->getChild().size();i++)
-    {
-        Date* t=root->getChild().at(i);
-        QStandardItem *item = new QStandardItem(QString(t->getName()));
-        item->setCheckable(true);
-        itemRoot->appendRow(item);
-
-        buildTreeModel(t,item);
-    }
 }

@@ -6,7 +6,7 @@
 class Element : public Date
 {
 public:
-    Element(Date* p);
+    Element();
 
     void setType(const QString& t){type=t;}
     void setId(const QString& d){id=d;}

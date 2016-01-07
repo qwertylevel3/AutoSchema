@@ -6,7 +6,7 @@
 class CompletxType : public Date
 {
 public:
-    CompletxType(Date* p);
+    CompletxType();
 };
 
 #endif // COMPLETXTYPE_H

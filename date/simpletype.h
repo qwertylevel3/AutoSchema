@@ -6,7 +6,7 @@
 class SimpleType : public Date
 {
 public:
-    SimpleType(Date* p);
+    SimpleType();
 };
 
 #endif // SIMPLETYPE_H
