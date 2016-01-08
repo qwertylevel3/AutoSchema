@@ -4,11 +4,13 @@
 #include"date/alldatetype.h"
 #include<QStack>
 #include<QQueue>
+#include<QMessageBox>
 
 XsdAnalyser::XsdAnalyser()
 {
     model=0;
     root=0;
+    table=0;
 
     init();
 }
@@ -30,6 +32,9 @@ bool XsdAnalyser::analyse(const QString &fileName)
     QStack<QString> stack;
     stack.push(QString("element"));
 
+    //当前指针
+    current=root;
+
     while(!reader.atEnd())
     {
         reader.readNextStartElement();
@@ -43,43 +48,49 @@ bool XsdAnalyser::analyse(const QString &fileName)
             if(temp=="element"
                     ||temp=="complexType"
                     ||temp=="simpleType")
-                p=static_cast<Date*>(p->parent());
+            {
+                current=static_cast<Date*>(current->parent());
+            }
         }
         else
         {
-            stack.push(temp);
-            parse(temp,p);
+            if(temp!="annotation")
+            {
+                stack.push(temp);
+            }
+            if(!parse(temp,current))
+            {
+                file.close();
+                return false;
+            }
         }
     }
 
-
+    QMessageBox meg;
+    meg.setText(QString("解析完成"));
+    meg.exec();
 
     file.close();
     return true;
 }
 
-QStandardItemModel *XsdAnalyser::getIndexModel()
+
+Date *XsdAnalyser::clone()
 {
-    setIndexCheckState(root);
-    setIndexShowState(root);
-    return model;
+    Date* newRoot=new Date();
+    clone(root,newRoot);
+    return newRoot;
 }
 
-QStandardItemModel *XsdAnalyser::getResultModel()
+QStandardItemModel *XsdAnalyser::getTable()
 {
-    setResultCheckState(root);
-    setResultShowState(root);
-    return model;
-}
+    if(table)
+    {
+        delete table;
+    }
+    createTable(root);
 
-void XsdAnalyser::updateIndexDate()
-{
-    updateIndex(root);
-}
-
-void XsdAnalyser::updateResultDate()
-{
-    updateResult(root);
+    return table;
 }
 
 void XsdAnalyser::init()
@@ -96,7 +107,31 @@ void XsdAnalyser::init()
     model=new QStandardItemModel();
     root=new Date();
     model->appendRow(root);
-    p=root;
+}
+
+void XsdAnalyser::clone(Date *origin, Date *r)
+{
+    for(int i=0;i<origin->rowCount();i++)
+    {
+        Date* temp=static_cast<Date*>(origin->child(i))->clone();
+        r->appendRow(temp);
+        clone(static_cast<Date*>(origin->child(i)),temp);
+    }
+}
+
+void XsdAnalyser::createTable(Date *r)
+{
+    if(r->isCheckable() && r->checkState()==Qt::Checked)
+    {
+        Element* element=new Element();
+        element->setName(r->getName());
+        element->setText(element->getName());
+        table->appendRow(element);
+    }
+    for(int i=0;i<r->rowCount();i++)
+    {
+        createTable(static_cast<Date*>(r->child(i)));
+    }
 }
 
 bool XsdAnalyser::analyseComplexType(Date *parent)
@@ -105,9 +140,9 @@ bool XsdAnalyser::analyseComplexType(Date *parent)
     t->setName(reader.attributes().value("name").toString());
     t->setText(t->getName());
 
-    parent->addChild(t);
+    parent->appendRow(t);
 
-    p=t;
+    current=t;
 
     return true;
 }
@@ -118,9 +153,9 @@ bool XsdAnalyser::analyseSimpleType(Date *parent)
     t->setName(reader.attributes().value("name").toString());
     t->setText(t->getName());
 
-    parent->addChild(t);
+    parent->appendRow(t);
 
-    p=t;
+    current=t;
 
     return true;
 }
@@ -133,9 +168,23 @@ bool XsdAnalyser::analyseElement(Date* parent)
     t->setType(reader.attributes().value("type").toString());
     t->setText(t->getName());
 
-    parent->addChild(t);
+    parent->appendRow(t);
 
-    p=t;
+    current=t;
+
+    return true;
+}
+
+bool XsdAnalyser::analyseAnnotation(Date *parent)
+{
+    reader.readNextStartElement();
+    while(reader.name().toString()=="documentation")
+    {
+        QString documentation=reader.readElementText();
+        parent->addAnnotation(documentation);
+        reader.readNextStartElement();
+    }
+
 
     return true;
 }
@@ -166,102 +215,14 @@ bool XsdAnalyser::parse(const QString &type, Date *parent)
             return false;
         }
     }
+    else if(type=="annotation")
+    {
+        if(!analyseAnnotation(parent))
+        {
+            qDebug()<<"analyse annotation fail"<<endl;
+            return false;
+        }
+    }
     return true;
-}
-
-void XsdAnalyser::setIndexCheckState(Date *r)
-{
-    if(r->isIndexChecked() && r->isCheckable())
-    {
-        r->setCheckState(Qt::Checked);
-
-    }
-    else if(r->isCheckable())
-    {
-        r->setCheckState(Qt::Unchecked);
-    }
-
-    for(int i=0;i<r->rowCount();i++)
-    {
-        setIndexCheckState(static_cast<Date*>(r->child(i)));
-    }
-}
-
-void XsdAnalyser::setIndexShowState(Date *r)
-{
-    r->setEnabled(true);
-    for(int i=0;i<r->rowCount();i++)
-    {
-        setIndexShowState(static_cast<Date*>(r->child(i)));
-    }
-}
-
-void XsdAnalyser::setResultCheckState(Date *r)
-{
-    if(r->isResultChecked() && r->isCheckable())
-    {
-        r->setCheckState(Qt::Checked);
-    }
-    else if(r->isCheckable())
-    {
-        r->setCheckState(Qt::Unchecked);
-    }
-
-    for(int i=0;i<r->rowCount();i++)
-    {
-        setResultCheckState(static_cast<Date*>(r->child(i)));
-    }
-}
-
-void XsdAnalyser::setResultShowState(Date *r)
-{
-    if(r->isIndexChecked())
-    {
-        r->setEnabled(true);
-    }
-    else if(r->isCheckable())
-    {
-        r->setEnabled(false);
-    }
-    for(int i=0;i<r->rowCount();i++)
-    {
-        setResultShowState(static_cast<Date*>(r->child(i)));
-    }
-}
-
-//从index页离开时更新
-void XsdAnalyser::updateIndex(Date *r)
-{
-    if(r->checkState()==Qt::Checked && r->isCheckable())
-    {
-        r->indexCheck(true);
-    }
-    else if(r->isCheckable())
-    {
-        r->indexCheck(false);
-    }
-    for(int i=0;i<r->rowCount();i++)
-    {
-
-        updateIndex(static_cast<Date*>(r->child(i)));
-    }
-}
-//从result页离开时更新
-void XsdAnalyser::updateResult(Date *r)
-{
-    if(r->checkState()==Qt::Checked
-            && r->isEnabled()
-            && r->isCheckable())
-    {
-        r->resultCheck(true);
-    }
-    else
-    {
-        r->resultCheck(false);
-    }
-    for(int i=0;i<r->rowCount();i++)
-    {
-        updateResult(static_cast<Date*>(r->child(i)));
-    }
 }
 

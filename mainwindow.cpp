@@ -3,6 +3,11 @@
 #include<QFileDialog>
 #include<QDebug>
 #include<QXmlStreamReader>
+#include"chooseitemdialog.h"
+#include<QTableView>
+#include"date/date.h"
+#include"indexwidget.h"
+#include<QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,18 +18,20 @@ MainWindow::MainWindow(QWidget *parent) :
     createActions();
     createMenus();
 
+
+    tabWidget=new QTabWidget(this);
+    indexTab=new IndexTab(&analyser);
+    resultTab= new ResultTab(&analyser);
+    showDetailTab=new ShowDetailTab(&analyser);
+
+    tabWidget->addTab(indexTab,"index");
+    tabWidget->addTab(resultTab,"result");
+    tabWidget->addTab(showDetailTab,"showDetail");
+
+    this->setCentralWidget(tabWidget);
+
     setTab(0);
 
-    connect(ui->indexToResultButton,SIGNAL(clicked(bool)),
-            this,SLOT(indexToResult()));
-    connect(ui->resultToShowDetailButton,SIGNAL(clicked(bool)),
-            this,SLOT(resultToShowDetail()));
-    connect(ui->resultToIndexButton,SIGNAL(clicked(bool)),
-            this,SLOT(resultToindex()));
-    connect(ui->showDetailToResultButton,SIGNAL(clicked(bool)),
-            this,SLOT(showDetailToResult()));
-    connect(ui->completeButton,SIGNAL(clicked(bool)),
-            this,SLOT(complete()));
 }
 
 MainWindow::~MainWindow()
@@ -34,35 +41,37 @@ MainWindow::~MainWindow()
 
 void MainWindow::open()
 {
-    QString fileName=QFileDialog::getOpenFileName(this,
-                                                  tr("打开xsd文件"),".",
-                                                  tr("xsd files(*.xsd)"));
+//    QString fileName=QFileDialog::getOpenFileName(this,
+//                                                  tr("打开xsd文件"),".",
+//                                                  tr("xsd files(*.xsd)"));
+
+    //debug...
+    QString fileName="./2013-07-31_19_09_32.xsd";
+
     if(!fileName.isEmpty())
     {
-        parseXsd(fileName);
-
-        ui->treeView->setModel(analyser.getIndexModel());
+        if(!parseXsd(fileName))
+        {
+            QMessageBox::warning(this,tr("Error"),
+                                 tr("The file parse fail"),
+                                 QMessageBox::Ok);
+        }
     }
 }
 
 void MainWindow::indexToResult()
 {
-    analyser.updateIndexDate();
     setTab(1);
-    ui->resultTreeView->setModel(analyser.getResultModel());
 }
 
 void MainWindow::resultToShowDetail()
 {
-    analyser.updateResultDate();
     setTab(2);
 }
 
 void MainWindow::resultToindex()
 {
-    analyser.updateResultDate();
     setTab(0);
-    ui->treeView->setModel(analyser.getIndexModel());
 }
 
 void MainWindow::showDetailToResult()
@@ -74,6 +83,7 @@ void MainWindow::complete()
 {
 
 }
+
 
 void MainWindow::createActions()
 {
@@ -99,9 +109,9 @@ void MainWindow::createMenus()
 
 bool MainWindow::parseXsd(const QString &fileName)
 {
-    analyser.analyse(fileName);
-    return true;
+    return analyser.analyse(fileName);
 }
+
 
 void MainWindow::setTab(int index)
 {
@@ -109,12 +119,11 @@ void MainWindow::setTab(int index)
     {
         return;
     }
-    ui->mainTableWidget->setTabEnabled(0,false);
-    ui->mainTableWidget->setTabEnabled(1,false);
-    ui->mainTableWidget->setTabEnabled(2,false);
+    tabWidget->setTabEnabled(0,false);
+    tabWidget->setTabEnabled(1,false);
+    tabWidget->setTabEnabled(2,false);
 
-    ui->mainTableWidget->setTabEnabled(index,true);
-    ui->mainTableWidget->setCurrentIndex(index);
-
+    tabWidget->setTabEnabled(index,true);
+    tabWidget->setCurrentIndex(index);
 
 }

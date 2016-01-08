@@ -4,7 +4,10 @@
 #include <QMainWindow>
 #include<QXmlSchema>
 #include<xsdanalyser.h>
-
+#include<QTabWidget>
+#include"indextab.h"
+#include"resulttab.h"
+#include"showdetailtab.h"
 namespace Ui {
 class MainWindow;
 }
@@ -18,22 +21,32 @@ public:
     ~MainWindow();
 private slots:
     void open();
+
     void indexToResult();
     void resultToShowDetail();
     void resultToindex();
     void showDetailToResult();
+
     void complete();
 private:
     void createActions();
     void createMenus();
-    bool parseXsd(const QString& fileName);
-    void setTab(int index);
 
+    bool parseXsd(const QString& fileName);
+
+    //设置那个tab页可见
+    void setTab(int index);
 
     QMenu* fileMenu;
 
     QAction* openAction;
     QAction* exitAction;
+
+    //3个tab页
+    QTabWidget* tabWidget;
+    IndexTab* indexTab;
+    ResultTab* resultTab;
+    ShowDetailTab* showDetailTab;
 
     XsdAnalyser analyser;
 

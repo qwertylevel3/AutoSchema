@@ -7,6 +7,7 @@ class SimpleType : public Date
 {
 public:
     SimpleType();
+    virtual SimpleType *clone();
 };
 
 #endif // SIMPLETYPE_H

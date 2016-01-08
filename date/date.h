@@ -9,25 +9,20 @@ class Date:public QStandardItem
 public:
     Date();
     ~Date();
+    //克隆的时候checkstatus统一为false
+    virtual Date *clone();
 
     QString getName(){return name;}
     QList<QString>& getAnnotation(){return annotation;}
-    bool isIndexChecked(){return indexChecked;}
-    bool isResultChecked(){return resultChecked;}
-    int getTableNo(){return tableNo;}
+    QString getPath(){return path;}
 
     void setName(const QString& n){name=n;}
     void addAnnotation(const QString& a){annotation.push_back(a);}
-    void addChild(Date* d){appendRow(d);}
-    void indexCheck(bool c);
-    void resultCheck(bool c);
-    void setTableNo(int n){tableNo=n;}
+    void setPath();
 protected:
     QString name;
     QList<QString> annotation;
-    bool indexChecked;
-    bool resultChecked;
-    int tableNo;
+    QString path;
 };
 
 #endif // DATE_H

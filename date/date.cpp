@@ -3,30 +3,32 @@
 Date::Date()
 {
     setCheckable(false);
-    indexChecked=false;
-    resultChecked=false;
-    tableNo=-1;
+    setPath();
 }
 
 Date::~Date()
 {
 }
 
-void Date::indexCheck(bool c)
+Date *Date::clone()
 {
-    indexChecked=c;
-//    for(int i=0;i<this->rowCount();i++)
-//    {
-//        static_cast<Date*>(this->child(i))->indexCheck(c);
-//    }
+    Date* d=new Date();
+    d->setName(this->getName());
+    for(int i=0;i<annotation.size();i++)
+    {
+        d->addAnnotation(annotation.at(i));
+    }
+    d->setText(this->text());
+    d->setCheckable(this->isCheckable());
+    return d;
 }
 
-void Date::resultCheck(bool c)
+void Date::setPath()
 {
-    resultChecked=c;
-//    for(int i=0;i<this->rowCount();i++)
-//    {
-//        static_cast<Date*>(this->child(i))->resultCheck(c);
-//    }
+    while(this->parent())
+    {
+        QString temp=static_cast<Date*>(this->parent())->getName();
+        temp=QString("/")+temp;
+        path=temp+path;
+    }
 }
-

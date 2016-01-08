@@ -7,6 +7,7 @@ class CompletxType : public Date
 {
 public:
     CompletxType();
+    virtual CompletxType *clone();
 };
 
 #endif // COMPLETXTYPE_H

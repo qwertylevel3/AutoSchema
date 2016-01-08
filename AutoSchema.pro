@@ -21,7 +21,13 @@ SOURCES += main.cpp\
     date/date.cpp \
     date/completxtype.cpp \
     date/simpletype.cpp \
-    date/element.cpp
+    date/element.cpp \
+    indexwidget.cpp \
+    indextab.cpp \
+    resultwidget.cpp \
+    showdetailwidget.cpp \
+    resulttab.cpp \
+    showdetailtab.cpp
 
 HEADERS  += mainwindow.h \
     chooseitemdialog.h \
@@ -30,7 +36,13 @@ HEADERS  += mainwindow.h \
     date/completxtype.h \
     date/simpletype.h \
     date/element.h \
-    date/alldatetype.h
+    date/alldatetype.h \
+    indexwidget.h \
+    indextab.h \
+    resultwidget.h \
+    showdetailwidget.h \
+    resulttab.h \
+    showdetailtab.h
 
 FORMS    += mainwindow.ui \
     chooseitemdialog.ui

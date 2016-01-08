@@ -7,6 +7,7 @@ class Element : public Date
 {
 public:
     Element();
+    virtual Element *clone();
 
     void setType(const QString& t){type=t;}
     void setId(const QString& d){id=d;}
