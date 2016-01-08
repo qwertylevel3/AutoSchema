@@ -19,6 +19,7 @@ public:
     void setName(const QString& n){name=n;}
     void addAnnotation(const QString& a){annotation.push_back(a);}
     void setPath();
+    void setPath(const QString& p){path=p;}
 protected:
     QString name;
     QList<QString> annotation;

@@ -32,15 +32,16 @@ bool XsdAnalyser::analyse(const QString &fileName)
     QStack<QString> stack;
     stack.push(QString("element"));
 
+    //读取schema项
+    reader.readNextStartElement();
+
     //当前指针
     current=root;
 
-    while(!reader.atEnd())
+    while(!reader.atEnd() && !stack.empty())
     {
         reader.readNextStartElement();
         QString temp=reader.name().toString();
-
-        QString top=stack.top();
 
         if(temp==stack.top())
         {
@@ -50,6 +51,11 @@ bool XsdAnalyser::analyse(const QString &fileName)
                     ||temp=="simpleType")
             {
                 current=static_cast<Date*>(current->parent());
+            }
+            //如果是最后一个element（根）
+            if(stack.isEmpty())
+            {
+                root->setName(reader.attributes().value("name").toString());
             }
         }
         else
@@ -65,6 +71,8 @@ bool XsdAnalyser::analyse(const QString &fileName)
             }
         }
     }
+
+    setDatePath(root);
 
     QMessageBox meg;
     meg.setText(QString("解析完成"));
@@ -107,6 +115,15 @@ void XsdAnalyser::init()
     model=new QStandardItemModel();
     root=new Date();
     model->appendRow(root);
+}
+
+void XsdAnalyser::setDatePath(Date *r)
+{
+    r->setPath();
+    for(int i=0;i<r->rowCount();i++)
+    {
+        setDatePath(static_cast<Date*>(r->child(i)));
+    }
 }
 
 void XsdAnalyser::clone(Date *origin, Date *r)

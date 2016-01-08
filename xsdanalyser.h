@@ -21,6 +21,9 @@ public:
 protected:
     void init();
 
+    //统一设置每个数据项的路径属性
+    void setDatePath(Date* r);
+
     //帮助函数，供getTable调用
     void createTable(Date *r);
 

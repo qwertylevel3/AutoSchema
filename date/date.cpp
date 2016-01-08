@@ -3,7 +3,6 @@
 Date::Date()
 {
     setCheckable(false);
-    setPath();
 }
 
 Date::~Date()
@@ -20,15 +19,23 @@ Date *Date::clone()
     }
     d->setText(this->text());
     d->setCheckable(this->isCheckable());
+    d->setPath(this->getPath());
+
     return d;
 }
 
 void Date::setPath()
 {
-    while(this->parent())
+    Date* p=this;
+    while(p->parent())
     {
-        QString temp=static_cast<Date*>(this->parent())->getName();
+        QString temp=static_cast<Date*>(p->parent())->getName();
+
         temp=QString("/")+temp;
         path=temp+path;
+        p=static_cast<Date*>(p->parent());
     }
+
+    path.append("/");
+    path.append(this->getName());
 }

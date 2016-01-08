@@ -15,6 +15,7 @@ CompletxType *CompletxType::clone()
     }
     d->setText(this->text());
     d->setCheckable(this->isCheckable());
+    d->setPath(this->getPath());
     return d;
 }
 

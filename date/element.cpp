@@ -15,6 +15,7 @@ Element *Element::clone()
     }
     d->setText(this->text());
     d->setCheckable(this->isCheckable());
+    d->setPath(this->getPath());
 
     d->setType(this->getType());
     d->setId(this->getId());

@@ -13,6 +13,7 @@ SimpleType *SimpleType::clone()
     {
         d->addAnnotation(annotation.at(i));
     }
+    d->setPath(this->getPath());
     d->setText(this->text());
     d->setCheckable(this->isCheckable());
     return d;
