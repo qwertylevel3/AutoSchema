@@ -32,7 +32,7 @@ bool XsdAnalyser::analyse(const QString &fileName)
     QStack<QString> stack;
     stack.push(QString("element"));
 
-    //读取schema项
+    //过滤schema项
     reader.readNextStartElement();
 
     //当前指针

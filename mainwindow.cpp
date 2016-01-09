@@ -32,6 +32,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setTab(0);
 
+    connect(indexTab,SIGNAL(next()),this,SLOT(indexToResult()));
+
+
 }
 
 MainWindow::~MainWindow()
