@@ -11,6 +11,7 @@
 #include<QScrollArea>
 #include"chooseitemdialog.h"
 #include<QList>
+#include<xsdanalyser.h>
 
 class ShowDetailItemWidget:public QWidget
 {
@@ -32,10 +33,12 @@ class ShowDetailTableWidget:public QWidget
 {
     Q_OBJECT
 public:
-    ShowDetailTableWidget(QWidget *parent = 0);
+    ShowDetailTableWidget(XsdAnalyser* a,QWidget *parent = 0);
+    QList<ShowDetailItemWidget*>& getList(){return list;}
 public slots:
     void createTable();
 protected:
+    XsdAnalyser* analyser;
     QList<ShowDetailItemWidget*> list;
 
     QWidget* itemListWidget;

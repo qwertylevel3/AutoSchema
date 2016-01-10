@@ -22,13 +22,15 @@ signals:
 public slots:
     void createIndex();
     void sendNext();
+    void writeFile(const QString& fileName);
 protected:
     XsdAnalyser* analyser;
     QStandardItemModel* model;
 
-    QWidget* list;
+    QWidget* listWidget;
 
     ChooseItemDialog* dialog;
+    QVBoxLayout* listLayout;
 
     QList<IndexWidget*> indexList;
     QScrollArea* scrollArea;

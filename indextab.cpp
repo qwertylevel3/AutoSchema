@@ -1,5 +1,8 @@
 #include "indextab.h"
 #include<date/element.h>
+#include<QXmlStreamWriter>
+#include<QFile>
+#include<QMessageBox>
 
 
 IndexTab::IndexTab(XsdAnalyser *a, QWidget *parent) :
@@ -28,6 +31,11 @@ IndexTab::IndexTab(XsdAnalyser *a, QWidget *parent) :
     hLayout->addWidget(scrollArea);
     hLayout->addLayout(vLayout);
 
+    listWidget=new QWidget();
+    listLayout=new QVBoxLayout();
+    listWidget->setLayout(listLayout);
+    scrollArea->setWidget(listWidget);
+
     this->setLayout(hLayout);
 
     connect(chooseItemButton,SIGNAL(clicked(bool)),
@@ -38,9 +46,27 @@ IndexTab::IndexTab(XsdAnalyser *a, QWidget *parent) :
 
 void IndexTab::createIndex()
 {
-    list=new QWidget();
-    QVBoxLayout* listLayout=new QVBoxLayout();
-    list->setLayout(listLayout);
+    for(int i=0;i<indexList.size();i++)
+    {
+        listLayout->removeWidget(indexList[i]);
+    }
+
+    for (QList<IndexWidget*>::iterator i = indexList.begin();
+         i!= indexList.end();i++)
+    {
+        delete *i;
+    }
+    indexList.clear();
+
+
+    listWidget=new QWidget();
+    listLayout=new QVBoxLayout();
+
+
+    listWidget->setLayout(listLayout);
+
+
+
     dialog=new ChooseItemDialog(analyser);
 
     if(dialog->exec())
@@ -60,15 +86,52 @@ void IndexTab::createIndex()
                 annotation.append(item->getAnnotation().at(i));
             }
             indexItem->setStatusTip(annotation);
+
             listLayout->addWidget(indexItem);
             indexList.push_back(indexItem);
         }
     }
-    scrollArea->setWidget(list);
+
+    scrollArea->setWidget(listWidget);
 }
 
 void IndexTab::sendNext()
 {
     emit next();
+}
+
+void IndexTab::writeFile(const QString &fileName)
+{
+    QFile file(fileName);
+    if(!file.open(QFile::WriteOnly | QFile::Text))
+    {
+        QMessageBox::warning(this,tr("can not write file"),
+                             tr("无法写index文件"),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    QXmlStreamWriter xmlWriter(&file);
+
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("config");
+
+    for(int i=0;i<indexList.size();i++)
+    {
+        xmlWriter.writeStartElement("index");
+
+        xmlWriter.writeTextElement("indexName",indexList[i]->getEName());
+        xmlWriter.writeTextElement("type",QString::number(indexList[i]->getType()));
+        xmlWriter.writeTextElement("showName",indexList[i]->getShowName());
+        xmlWriter.writeTextElement("path",indexList[i]->getPath());
+        xmlWriter.writeTextElement("analyzed",QString::number(indexList[i]->isParticiple()?1:0));
+
+        xmlWriter.writeEndElement();
+    }
+
+    xmlWriter.writeEndDocument();
+
+    file.close();
 }
 

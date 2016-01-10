@@ -1,6 +1,9 @@
 #include "resulttab.h"
 #include<QLayout>
 #include<QDebug>
+#include<QXmlStreamWriter>
+#include<QFile>
+#include<QMessageBox>
 
 ResultTab::ResultTab(XsdAnalyser *a, QWidget *parent) :
     QWidget(parent)
@@ -50,6 +53,7 @@ void ResultTab::initResult(QList<IndexWidget*>& indexList)
 
         widget->setIndexName(indexList[i]->getEName());
         widget->setShowName(indexList[i]->getShowName());
+        widget->setType(indexList[i]->getType());
 
         //qDebug()<<indexList.at(i)->getEName()<<endl;
         //qDebug()<<widget->getIndexName()<<endl;
@@ -68,5 +72,39 @@ void ResultTab::sendNext()
 void ResultTab::sendPrevious()
 {
     emit previous();
+}
+
+void ResultTab::writeFile(const QString &fileName)
+{
+    QFile file(fileName);
+    if(!file.open(QFile::WriteOnly | QFile::Text))
+    {
+        QMessageBox::warning(this,tr("can not write file"),
+                             tr("无法写result文件"),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    QXmlStreamWriter xmlWriter(&file);
+
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("config");
+
+    for(int i=0;i<resultList.size();i++)
+    {
+        xmlWriter.writeStartElement("result");
+
+        xmlWriter.writeTextElement("indexName",resultList[i]->getIndexName());
+        xmlWriter.writeTextElement("showName",resultList[i]->getShowName());
+        xmlWriter.writeTextElement("type",QString::number(resultList[i]->getType()));
+        xmlWriter.writeTextElement("showdetail",QString::number(resultList[i]->getShowDetail()));
+
+        xmlWriter.writeEndElement();
+    }
+
+    xmlWriter.writeEndDocument();
+
+    file.close();
 }
 

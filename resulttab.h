@@ -22,6 +22,7 @@ public slots:
     void initResult(QList<IndexWidget*>& indexList);
     void sendNext();
     void sendPrevious();
+    void writeFile(const QString& fileName);
 protected:
     XsdAnalyser* analyser;
 

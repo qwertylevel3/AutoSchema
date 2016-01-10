@@ -17,13 +17,14 @@ public:
 
     void setIndexName(const QString& name){indexNameLabel->setText(name);}
     void setShowName(const QString& name){showNameLabel->setText(name);}
-
+    void setType(int t){type=t;}
     void setShowDetailComboBox();
 
     QString getIndexName(){return indexNameLabel->text();}
     bool isChecked(){return checkBox->isChecked();}
     QString getShowName(){return showNameLabel->text();}
     int getShowDetail(){return showDetailComboBox->currentIndex();}
+    int getType(){return type;}
 signals:
 
 public slots:
@@ -33,6 +34,7 @@ protected:
     QLabel* showNameLabel;
     QComboBox* showDetailComboBox;
     QHBoxLayout* layout;
+    int type;
 };
 
 #endif // RESULTWIDGET_H

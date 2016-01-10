@@ -19,6 +19,7 @@ public slots:
     void deleteTable();
     void sendPrevious();
     void sendComplete();
+    void writeFile(const QString& fileName);
 protected:
     XsdAnalyser* analyser;
     QLineEdit* tableNameLineEdit;

@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     resultwidget.cpp \
     showdetailwidget.cpp \
     resulttab.cpp \
-    showdetailtab.cpp
+    showdetailtab.cpp \
+    inputiddialog.cpp
 
 HEADERS  += mainwindow.h \
     chooseitemdialog.h \
@@ -42,10 +43,12 @@ HEADERS  += mainwindow.h \
     resultwidget.h \
     showdetailwidget.h \
     resulttab.h \
-    showdetailtab.h
+    showdetailtab.h \
+    inputiddialog.h
 
 FORMS    += mainwindow.ui \
-    chooseitemdialog.ui
+    chooseitemdialog.ui \
+    inputiddialog.ui
 
 RESOURCES += \
     resource.qrc

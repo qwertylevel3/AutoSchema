@@ -8,6 +8,7 @@
 #include"date/date.h"
 #include"indexwidget.h"
 #include<QMessageBox>
+#include"inputiddialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -51,7 +52,7 @@ void MainWindow::open()
 //                                                  tr("xsd files(*.xsd)"));
 
     //debug...
-    QString fileName="./2013-07-31_19_09_32.xsd";
+    QString fileName="./2015_08_01_15_10_10.xsd";
 
     if(!fileName.isEmpty())
     {
@@ -87,7 +88,40 @@ void MainWindow::showDetailToResult()
 
 void MainWindow::complete()
 {
+    InputIDDialog dialog(this);
+    if(dialog.exec())
+    {
+        QString fileName=dialog.getID();
+        if(fileName.isEmpty())
+        {
+            QMessageBox::warning(this,tr("error"),
+                                 tr("ID 不能为空"),
+                                 QMessageBox::Ok);
+            return;
+        }
+        QDir dir;
+        dir.mkdir(fileName);
+        dir.cd(fileName);
+        dir.mkdir("index");
+        dir.mkdir("result");
+        dir.mkdir("showDetail");
 
+        QString indexFileName=fileName+QDir::separator()
+                +QString("index")+QDir::separator()+fileName+QString(".xml");
+
+        QString resultFileName=fileName+QDir::separator()
+                +QString("result")+QDir::separator()+fileName+QString(".xml");
+        QString showDetailFileName=fileName+QDir::separator()
+                +QString("showDetail")+QDir::separator()+fileName+QString(".xml");
+
+        indexTab->writeFile(indexFileName);
+        resultTab->writeFile(resultFileName);
+        showDetailTab->writeFile(showDetailFileName);
+
+        QMessageBox::warning(this,tr("over"),
+                             tr("文件已写入当前文件夹下"),
+                             QMessageBox::Ok);
+    }
 }
 
 

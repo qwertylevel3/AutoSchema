@@ -1,4 +1,7 @@
 #include "showdetailtab.h"
+#include<QMessageBox>
+#include<QFile>
+#include<QXmlStreamWriter>
 
 
 ShowDetailTab::ShowDetailTab(XsdAnalyser *a, QWidget *parent) :
@@ -63,12 +66,25 @@ ShowDetailTab::ShowDetailTab(XsdAnalyser *a, QWidget *parent) :
 
 void ShowDetailTab::addTable()
 {
-
+    QString tableName=tableNameLineEdit->text();
+    if(tableName.isEmpty())
+    {
+        QMessageBox::warning(this,tr("error"),tr("表名不能为空"),
+                             QMessageBox::Ok);
+        return ;
+    }
+    ShowDetailTableWidget* tableWidget=new ShowDetailTableWidget(analyser);
+    tabWidget->addTab(tableWidget,tableName);
 }
 
 void ShowDetailTab::deleteTable()
 {
-
+    int r=QMessageBox::warning(this,tr("delete"),tr("当前表将会被删除"),
+                               QMessageBox::Ok|QMessageBox::Cancel);
+    if(r==QMessageBox::Ok)
+    {
+        tabWidget->removeTab(tabWidget->currentIndex());
+    }
 }
 
 void ShowDetailTab::sendPrevious()
@@ -79,6 +95,56 @@ void ShowDetailTab::sendPrevious()
 void ShowDetailTab::sendComplete()
 {
     emit complete();
+}
+
+void ShowDetailTab::writeFile(const QString &fileName)
+{
+    QFile file(fileName);
+    if(!file.open(QFile::WriteOnly | QFile::Text))
+    {
+        QMessageBox::warning(this,tr("can not write file"),
+                             tr("无法写index文件"),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    QXmlStreamWriter xmlWriter(&file);
+
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("show");
+
+    for(int i=0;i<tabWidget->count();i++)
+    {
+        xmlWriter.writeStartElement("table");
+
+        xmlWriter.writeTextElement("id",QString::number(i));
+        xmlWriter.writeTextElement("tablename",tabWidget->tabText(i));
+
+        xmlWriter.writeEndElement();
+    }
+
+    for(int i=0;i<tabWidget->count();i++)
+    {
+        ShowDetailTableWidget* table=static_cast<ShowDetailTableWidget*>(tabWidget->widget(i));
+
+        for(int j=0;j<table->getList().size();j++)
+        {
+            xmlWriter.writeStartElement("detail");
+
+            xmlWriter.writeTextElement("showid",QString::number(j));
+            xmlWriter.writeTextElement("tableid",QString::number(i));
+            xmlWriter.writeTextElement("name",table->getList()[j]->getName());
+            xmlWriter.writeTextElement("path",table->getList()[j]->getPath());
+
+            xmlWriter.writeEndElement();
+        }
+
+    }
+
+    xmlWriter.writeEndDocument();
+
+    file.close();
 }
 
 
