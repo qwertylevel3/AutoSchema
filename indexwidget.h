@@ -18,12 +18,13 @@ public:
     void setENameLabel(const QString& name);
     void setCNameLabel(const QString& name);
     void setPathLabel(const QString& path);
+    void setShowName(const QString& name);
 
     void setTypeComboBox();
 
-    QString getEName(){return eNameLabel->text();}
-    QString getCName(){return cNameLabel->text();}
-    QString getPath(){return pathLabel->text();}
+    QString getEName(){return eNameLineEidt->text();}
+    QString getCName(){return cNameLineEdit->text();}
+    QString getPath(){return pathLineEidt->text();}
     int getType(){return typeComboBox->currentIndex();}
     QString getShowName(){return showNameLineEdit->text();}
     bool isParticiple(){return participleCheckBox->checkState()==Qt::Checked?true:false;}
@@ -33,11 +34,23 @@ public slots:
 
 protected:
     QLabel* eNameLabel;
+    QLineEdit* eNameLineEidt;
+
     QLabel* cNameLabel;
+    QLineEdit* cNameLineEdit;
+
     QLabel* pathLabel;
+    QLineEdit* pathLineEidt;
+
+    QLabel* typeLabel;
     QComboBox* typeComboBox;
+
+    QLabel* showNameLabel;
     QLineEdit* showNameLineEdit;
+
+    QLabel* participleLabel;
     QCheckBox* participleCheckBox;
+
     QHBoxLayout* layout;
 };
 

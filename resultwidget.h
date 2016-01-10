@@ -15,14 +15,14 @@ class ResultWidget : public QWidget
 public:
     explicit ResultWidget(QWidget *parent = 0);
 
-    void setIndexName(const QString& name){indexNameLabel->setText(name);}
-    void setShowName(const QString& name){showNameLabel->setText(name);}
+    void setIndexName(const QString& name);
+    void setShowName(const QString& name);
     void setType(int t){type=t;}
     void setShowDetailComboBox();
 
-    QString getIndexName(){return indexNameLabel->text();}
+    QString getIndexName(){return indexNameLineEdit->text();}
     bool isChecked(){return checkBox->isChecked();}
-    QString getShowName(){return showNameLabel->text();}
+    QString getShowName(){return showNameLineEdit->text();}
     int getShowDetail(){return showDetailComboBox->currentIndex();}
     int getType(){return type;}
 signals:
@@ -31,7 +31,10 @@ public slots:
 protected:
     QCheckBox *checkBox;
     QLabel* indexNameLabel;
+    QLineEdit* indexNameLineEdit;
     QLabel* showNameLabel;
+    QLineEdit* showNameLineEdit;
+    QLabel* showDetailLabel;
     QComboBox* showDetailComboBox;
     QHBoxLayout* layout;
     int type;

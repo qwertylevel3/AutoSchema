@@ -31,6 +31,7 @@ IndexTab::IndexTab(XsdAnalyser *a, QWidget *parent) :
     hLayout->addWidget(scrollArea);
     hLayout->addLayout(vLayout);
 
+
     listWidget=new QWidget();
     listLayout=new QVBoxLayout();
     listWidget->setLayout(listLayout);
@@ -79,6 +80,7 @@ void IndexTab::createIndex()
             indexItem->setENameLabel(item->getName());
             indexItem->setCNameLabel(item->getId());
             indexItem->setPathLabel(item->getPath());
+            indexItem->setShowName(item->getId());
 
             QString annotation;
             for(int i=0;i<item->getAnnotation().size();i++)\

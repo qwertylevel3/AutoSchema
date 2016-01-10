@@ -47,12 +47,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::open()
 {
-//    QString fileName=QFileDialog::getOpenFileName(this,
-//                                                  tr("打开xsd文件"),".",
-//                                                  tr("xsd files(*.xsd)"));
+    QString fileName=QFileDialog::getOpenFileName(this,
+                                                  tr("打开xsd文件"),".",
+                                                  tr("xsd files(*.xsd)"));
 
     //debug...
-    QString fileName="./2015_08_01_15_10_10.xsd";
+    //QString fileName="./2015_08_01_15_10_10.xsd";
 
     if(!fileName.isEmpty())
     {

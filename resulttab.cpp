@@ -27,6 +27,8 @@ ResultTab::ResultTab(XsdAnalyser *a, QWidget *parent) :
     vLayout->addWidget(previousButton);
     vLayout->addWidget(nextButton);
 
+
+
     QHBoxLayout* hLayout=new QHBoxLayout();
     hLayout->addWidget(scrollArea);
     hLayout->addLayout(vLayout);
