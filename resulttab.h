@@ -19,7 +19,6 @@ signals:
     void next();
     void previous();
 public slots:
-    void createResult();
     void initResult(QList<IndexWidget*>& indexList);
     void sendNext();
     void sendPrevious();

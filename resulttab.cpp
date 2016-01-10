@@ -37,11 +37,6 @@ ResultTab::ResultTab(XsdAnalyser *a, QWidget *parent) :
 
 }
 
-void ResultTab::createResult()
-{
-
-}
-
 void ResultTab::initResult(QList<IndexWidget*>& indexList)
 {
     list=new QWidget();
