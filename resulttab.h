@@ -7,6 +7,7 @@
 #include<Qlist>
 #include"resultwidget.h"
 #include<QScrollArea>
+#include"indextab.h"
 
 class ResultTab : public QWidget
 {
@@ -19,6 +20,7 @@ signals:
     void previous();
 public slots:
     void createResult();
+    void initResult(QList<IndexWidget*>& indexList);
     void sendNext();
     void sendPrevious();
 protected:

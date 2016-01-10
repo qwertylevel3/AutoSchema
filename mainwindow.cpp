@@ -65,6 +65,7 @@ void MainWindow::open()
 void MainWindow::indexToResult()
 {
     setTab(1);
+    resultTab->initResult(indexTab->getList());
 }
 
 void MainWindow::resultToShowDetail()

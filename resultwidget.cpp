@@ -5,7 +5,7 @@ ResultWidget::ResultWidget(QWidget *parent) :
 {
     checkBox=new QCheckBox();
     indexNameLabel=new QLabel();
-    showNameLineEdit=new QLineEdit();
+    showNameLabel=new QLabel();
     showDetailComboBox=new QComboBox();
 
     setShowDetailComboBox();
@@ -13,8 +13,10 @@ ResultWidget::ResultWidget(QWidget *parent) :
     layout=new QHBoxLayout();
     layout->addWidget(checkBox);
     layout->addWidget(indexNameLabel);
-    layout->addWidget(showNameLineEdit);
+    layout->addWidget(showNameLabel);
     layout->addWidget(showDetailComboBox);
+
+    this->setLayout(layout);
 }
 
 void ResultWidget::setShowDetailComboBox()

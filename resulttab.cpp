@@ -1,12 +1,13 @@
 #include "resulttab.h"
 #include<QLayout>
+#include<QDebug>
 
 ResultTab::ResultTab(XsdAnalyser *a, QWidget *parent) :
     QWidget(parent)
 {
     analyser=a;
 
-    scrollArea=new QScrollArea(this);
+    scrollArea=new QScrollArea();
 
     nextButton=new QCommandLinkButton;
     nextButton->setIcon(QIcon(QString(":/resource/next.png")));
@@ -39,6 +40,29 @@ ResultTab::ResultTab(XsdAnalyser *a, QWidget *parent) :
 void ResultTab::createResult()
 {
 
+}
+
+void ResultTab::initResult(QList<IndexWidget*>& indexList)
+{
+    list=new QWidget();
+    QVBoxLayout* listLayout=new QVBoxLayout();
+    list->setLayout(listLayout);
+
+
+    for(int i=0;i<indexList.size();i++)
+    {
+        ResultWidget* widget=new ResultWidget();
+
+        widget->setIndexName(indexList[i]->getEName());
+        widget->setShowName(indexList[i]->getShowName());
+
+        //qDebug()<<indexList.at(i)->getEName()<<endl;
+        //qDebug()<<widget->getIndexName()<<endl;
+
+        listLayout->addWidget(widget);
+        resultList.push_back(widget);
+    }
+    scrollArea->setWidget(list);
 }
 
 void ResultTab::sendNext()

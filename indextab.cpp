@@ -61,6 +61,7 @@ void IndexTab::createIndex()
             }
             indexItem->setStatusTip(annotation);
             listLayout->addWidget(indexItem);
+            indexList.push_back(indexItem);
         }
     }
     scrollArea->setWidget(list);

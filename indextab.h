@@ -16,7 +16,7 @@ class IndexTab : public QWidget
     Q_OBJECT
 public:
     explicit IndexTab(XsdAnalyser* a, QWidget *parent = 0);
-
+    QList<IndexWidget*>& getList(){return indexList;}
 signals:
     void next();
 public slots:
