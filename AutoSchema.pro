@@ -44,7 +44,8 @@ HEADERS  += mainwindow.h \
     showdetailwidget.h \
     resulttab.h \
     showdetailtab.h \
-    inputiddialog.h
+    inputiddialog.h \
+    singleton.h
 
 FORMS    += mainwindow.ui \
     chooseitemdialog.ui \

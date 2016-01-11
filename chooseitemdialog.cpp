@@ -3,17 +3,18 @@
 #include<date/date.h>
 #include<QDebug>
 
-ChooseItemDialog::ChooseItemDialog(XsdAnalyser *a, QWidget *parent) :
+ChooseItemDialog::ChooseItemDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ChooseItemDialog)
 {
-    analyser=a;
     ui->setupUi(this);
-
-    setOriginModel();
 
     connect(ui->buttonBox,SIGNAL(accepted()),
             this,SLOT(createModel()));
+    root=0;
+    model=0;
+
+    version=0;
 }
 
 ChooseItemDialog::~ChooseItemDialog()
@@ -23,10 +24,14 @@ ChooseItemDialog::~ChooseItemDialog()
 
 void ChooseItemDialog::setOriginModel()
 {
-    originRoot=analyser->clone();
+    originRoot=XsdAnalyser::instance()->clone();
+
     originModel=new QStandardItemModel;
-    originModel->appendRow(originRoot);
+    originModel->invisibleRootItem()->setChild(0,originRoot);
     ui->treeView->setModel(originModel);
+
+    //每次clone数据时更新版本
+    version=XsdAnalyser::instance()->getVersion();
 }
 
 QStandardItemModel *ChooseItemDialog::getModel()
@@ -34,13 +39,34 @@ QStandardItemModel *ChooseItemDialog::getModel()
     return model;
 }
 
+int ChooseItemDialog::exec()
+{
+    //如果发现版本落后于Analyser（Analyser读入了新xsd文件）,重新克隆数据树
+    if(version!=XsdAnalyser::instance()->getVersion())
+    {
+        setOriginModel();
+    }
+
+    return QDialog::exec();
+}
+
 
 void ChooseItemDialog::createModel()
 {
+    if(root)
+    {
+        delete root;
+    }
+    if(model)
+    {
+        delete model;
+    }
+
     root=new Date();
     model=new QStandardItemModel();
-    createModel(originRoot);
 
+
+    createModel(originRoot);
 }
 
 void ChooseItemDialog::createModel(Date *ori)

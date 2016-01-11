@@ -10,7 +10,7 @@ class ShowDetailTab : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ShowDetailTab(XsdAnalyser* a,QWidget *parent = 0);
+    explicit ShowDetailTab(QWidget *parent = 0);
 signals:
     void previous();
     void complete();
@@ -21,7 +21,6 @@ public slots:
     void sendComplete();
     void writeFile(const QString& fileName);
 protected:
-    XsdAnalyser* analyser;
     QLineEdit* tableNameLineEdit;
     QCommandLinkButton* addTableLinkButton;
     QCommandLinkButton* deleteTableLinkButton;

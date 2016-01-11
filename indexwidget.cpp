@@ -1,65 +1,34 @@
 #include "indexwidget.h"
 
-IndexWidget::IndexWidget(QWidget *parent) : QWidget(parent)
+IndexWidget::IndexWidget()
 {
-    eNameLabel=new QLabel();
-    eNameLabel->setText("英文名称：");
-    eNameLineEidt=new QLineEdit();
 
-    cNameLabel=new QLabel();
-    cNameLabel->setText("中文名称：");
+    eNameLineEdit=new QLineEdit();
     cNameLineEdit=new QLineEdit();
-
-    pathLabel=new QLabel();
-    pathLabel->setText("路径：");
-    pathLineEidt=new QLineEdit();
-
-    typeLabel=new QLabel();
-    typeLabel->setText("类型：");
+    pathLineEdit=new QLineEdit();
     typeComboBox=new QComboBox();
-
-    showNameLabel=new QLabel();
-    showNameLabel->setText("showName：");
     showNameLineEdit=new QLineEdit();
-
-    participleLabel=new QLabel();
-    participleLabel->setText("分词：");
     participleCheckBox=new QCheckBox();
 
     setTypeComboBox();
-
-    layout=new QHBoxLayout(this);
-    layout->addWidget(eNameLabel);
-    layout->addWidget(eNameLineEidt);
-    layout->addWidget(cNameLabel);
-    layout->addWidget(cNameLineEdit);
-    layout->addWidget(typeLabel);
-    layout->addWidget(typeComboBox);
-    layout->addWidget(showNameLabel);
-    layout->addWidget(showNameLineEdit);
-    layout->addWidget(participleLabel);
-    layout->addWidget(participleLabel);
-    layout->addWidget(participleCheckBox);
-    layout->addWidget(pathLabel);
-    layout->addWidget(pathLineEidt);
 }
 
 void IndexWidget::setENameLabel(const QString &name)
 {
-    eNameLineEidt->setText(name);
-    eNameLineEidt->setReadOnly(true);
+    eNameLineEdit->setText(name);
+    eNameLineEdit->setEnabled(false);
 }
 
 void IndexWidget::setCNameLabel(const QString &name)
 {
     cNameLineEdit->setText(name);
-    eNameLineEidt->setReadOnly(true);
+    eNameLineEdit->setEnabled(false);
 }
 
 void IndexWidget::setPathLabel(const QString &path)
 {
-    pathLineEidt->setText(path);
-    eNameLineEidt->setReadOnly(true);
+    pathLineEdit->setText(path);
+    eNameLineEdit->setEnabled(false);
 }
 
 void IndexWidget::setShowName(const QString &name)

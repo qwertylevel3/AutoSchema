@@ -19,11 +19,9 @@ ShowDetailItemWidget::ShowDetailItemWidget(QWidget *parent)
 
 //------------------------showDetailTableWidget----------------------//
 
-ShowDetailTableWidget::ShowDetailTableWidget(XsdAnalyser* a,QWidget *parent)
+ShowDetailTableWidget::ShowDetailTableWidget(QWidget *parent)
     :QWidget(parent)
 {
-    analyser=a;
-
     QVBoxLayout* vLayout=new QVBoxLayout();
 
     chooseItemButton=new QCommandLinkButton();
@@ -51,7 +49,7 @@ void ShowDetailTableWidget::createTable()
     itemListWidget=new QWidget();
     QVBoxLayout* listLayout=new QVBoxLayout();
     itemListWidget->setLayout(listLayout);
-    ChooseItemDialog dialog(analyser);
+    ChooseItemDialog dialog;
 
     if(dialog.exec())
     {

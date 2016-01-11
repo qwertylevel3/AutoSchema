@@ -33,12 +33,11 @@ class ShowDetailTableWidget:public QWidget
 {
     Q_OBJECT
 public:
-    ShowDetailTableWidget(XsdAnalyser* a,QWidget *parent = 0);
+    ShowDetailTableWidget(QWidget *parent = 0);
     QList<ShowDetailItemWidget*>& getList(){return list;}
 public slots:
     void createTable();
 protected:
-    XsdAnalyser* analyser;
     QList<ShowDetailItemWidget*> list;
 
     QWidget* itemListWidget;

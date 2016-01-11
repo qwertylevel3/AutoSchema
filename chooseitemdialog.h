@@ -13,11 +13,13 @@ class ChooseItemDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ChooseItemDialog(XsdAnalyser* a, QWidget *parent = 0);
+    explicit ChooseItemDialog(QWidget *parent = 0);
     ~ChooseItemDialog();
     //获得新数据
     QStandardItemModel *getModel();
-    void setAnalyser(XsdAnalyser* a){analyser=a;}
+
+    int getVersion(){return version;}
+    int exec();
 private slots:
     //根据选择生成新数据
     void createModel();
@@ -27,8 +29,6 @@ private:
     //生成数据树副本
     void setOriginModel();
 
-    XsdAnalyser* analyser;
-
     //根据选择生成的数据
     Date* root;
     QStandardItemModel* model;
@@ -36,6 +36,8 @@ private:
     //原数据树副本
     Date* originRoot;
     QStandardItemModel* originModel;
+
+    int version;
 
     Ui::ChooseItemDialog *ui;
 };

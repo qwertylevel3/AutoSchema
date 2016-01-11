@@ -15,7 +15,7 @@ class IndexTab : public QWidget
 {
     Q_OBJECT
 public:
-    explicit IndexTab(XsdAnalyser* a, QWidget *parent = 0);
+    explicit IndexTab(QWidget *parent = 0);
     QList<IndexWidget*>& getList(){return indexList;}
 signals:
     void next();
@@ -24,13 +24,20 @@ public slots:
     void sendNext();
     void writeFile(const QString& fileName);
 protected:
-    XsdAnalyser* analyser;
+    void addTitle();
     QStandardItemModel* model;
+
+    QLineEdit* eNameLabel;
+    QLineEdit* cNameLabel;
+    QLineEdit* pathLabel;
+    QLineEdit* typeLabel;
+    QLineEdit* showNameLabel;
+    QLineEdit* participleLabel;
 
     QWidget* listWidget;
 
     ChooseItemDialog* dialog;
-    QVBoxLayout* listLayout;
+    QGridLayout* listLayout;
 
     QList<IndexWidget*> indexList;
     QScrollArea* scrollArea;

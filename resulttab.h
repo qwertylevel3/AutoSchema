@@ -13,7 +13,7 @@ class ResultTab : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ResultTab(XsdAnalyser* a,QWidget *parent = 0);
+    explicit ResultTab(QWidget *parent = 0);
 
 signals:
     void next();
@@ -24,8 +24,6 @@ public slots:
     void sendPrevious();
     void writeFile(const QString& fileName);
 protected:
-    XsdAnalyser* analyser;
-
     QWidget* list;
     QStandardItemModel* model;
 

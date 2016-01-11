@@ -4,11 +4,9 @@
 #include<QXmlStreamWriter>
 
 
-ShowDetailTab::ShowDetailTab(XsdAnalyser *a, QWidget *parent) :
+ShowDetailTab::ShowDetailTab(QWidget *parent) :
     QWidget(parent)
 {
-    analyser=a;
-
     QHBoxLayout* hLayout=new QHBoxLayout();
 
     tableNameLineEdit=new QLineEdit();
@@ -73,7 +71,7 @@ void ShowDetailTab::addTable()
                              QMessageBox::Ok);
         return ;
     }
-    ShowDetailTableWidget* tableWidget=new ShowDetailTableWidget(analyser);
+    ShowDetailTableWidget* tableWidget=new ShowDetailTableWidget();
     tabWidget->addTab(tableWidget,tableName);
 }
 
