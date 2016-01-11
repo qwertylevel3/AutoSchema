@@ -35,14 +35,16 @@ ResultTab::ResultTab(QWidget *parent) :
             this,SLOT(sendNext()));
     connect(previousButton,SIGNAL(clicked(bool)),
             this,SLOT(sendPrevious()));
-
 }
 
 void ResultTab::initResult(QList<IndexWidget*>& indexList)
 {
     list=new QWidget();
-    QVBoxLayout* listLayout=new QVBoxLayout();
+    listLayout=new QGridLayout();
     list->setLayout(listLayout);
+
+    addTitle();
+
 
 
     for(int i=0;i<indexList.size();i++)
@@ -56,7 +58,11 @@ void ResultTab::initResult(QList<IndexWidget*>& indexList)
         //qDebug()<<indexList.at(i)->getEName()<<endl;
         //qDebug()<<widget->getIndexName()<<endl;
 
-        listLayout->addWidget(widget);
+        listLayout->addWidget(widget->getCheckBox(),i+1,0);
+        listLayout->addWidget(widget->getIndexNameLineEdit(),i+1,1);
+        listLayout->addWidget(widget->getShowNameLineEdit(),i+1,2);
+        listLayout->addWidget(widget->getShowDetailComboBox(),i+1,3);
+
         resultList.push_back(widget);
     }
     scrollArea->setWidget(list);
@@ -104,5 +110,24 @@ void ResultTab::writeFile(const QString &fileName)
     xmlWriter.writeEndDocument();
 
     file.close();
+}
+
+void ResultTab::addTitle()
+{
+    indexNameLabel=new QLineEdit();
+    indexNameLabel->setText("indexName");
+    indexNameLabel->setEnabled(false);
+
+    showNameLabel=new QLineEdit();
+    showNameLabel->setText("showName");
+    showNameLabel->setEnabled(false);
+
+    showDetailLabel=new QLineEdit();
+    showDetailLabel->setText("showDetail");
+    showDetailLabel->setEnabled(false);
+
+    listLayout->addWidget(indexNameLabel,0,1);
+    listLayout->addWidget(showNameLabel,0,2);
+    listLayout->addWidget(showDetailLabel,0,3);
 }
 
