@@ -45,8 +45,6 @@ void ResultTab::initResult(QList<IndexWidget*>& indexList)
 
     addTitle();
 
-
-
     for(int i=0;i<indexList.size();i++)
     {
         ResultWidget* widget=new ResultWidget();

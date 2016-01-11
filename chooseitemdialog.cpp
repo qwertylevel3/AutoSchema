@@ -27,8 +27,10 @@ void ChooseItemDialog::setOriginModel()
     originRoot=XsdAnalyser::instance()->clone();
 
     originModel=new QStandardItemModel;
-    originModel->invisibleRootItem()->setChild(0,originRoot);
+    originModel->appendRow(originRoot);
+    //qDebug()<<originRoot->text()<<endl;
     ui->treeView->setModel(originModel);
+    ui->treeView->setHeaderHidden(true);
 
     //每次clone数据时更新版本
     version=XsdAnalyser::instance()->getVersion();

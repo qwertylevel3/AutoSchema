@@ -19,13 +19,13 @@ class ShowDetailItemWidget:public QWidget
 public:
     ShowDetailItemWidget(QWidget *parent = 0);
 
-    void setNameLabel(const QString& name){nameLabel->setText(name);}
+    void setNameLabel(const QString& name){nameLineEdit->setText(name);}
     void setPathLabel(const QString& path){pathLabel->setText(path);}
 
-    QString getName(){return nameLabel->text();}
+    QString getName(){return nameLineEdit->text();}
     QString getPath(){return pathLabel->text();}
 protected:
-    QLabel* nameLabel;
+    QLineEdit* nameLineEdit;
     QLabel* pathLabel;
 };
 
@@ -43,6 +43,7 @@ protected:
     QWidget* itemListWidget;
     QScrollArea* scrollArea;
     QCommandLinkButton* chooseItemButton;
+    ChooseItemDialog dialog;
 };
 
 
