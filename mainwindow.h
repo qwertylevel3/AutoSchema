@@ -48,8 +48,6 @@ private:
     ResultTab* resultTab;
     ShowDetailTab* showDetailTab;
 
-    XsdAnalyser analyser;
-
     Ui::MainWindow *ui;
 };
 

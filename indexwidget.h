@@ -9,11 +9,10 @@
 #include<QLayout>
 #include<QLayoutItem>
 
-class IndexWidget : public QWidget
+class IndexWidget
 {
-    Q_OBJECT
 public:
-    explicit IndexWidget(QWidget *parent = 0);
+    explicit IndexWidget();
 
     void setENameLabel(const QString& name);
     void setCNameLabel(const QString& name);
@@ -22,36 +21,31 @@ public:
 
     void setTypeComboBox();
 
-    QString getEName(){return eNameLineEidt->text();}
+    QString getEName(){return eNameLineEdit->text();}
     QString getCName(){return cNameLineEdit->text();}
-    QString getPath(){return pathLineEidt->text();}
+    QString getPath(){return pathLineEdit->text();}
     int getType(){return typeComboBox->currentIndex();}
     QString getShowName(){return showNameLineEdit->text();}
     bool isParticiple(){return participleCheckBox->checkState()==Qt::Checked?true:false;}
-signals:
 
-public slots:
-
+    QLineEdit* getENameLineEdit(){return eNameLineEdit;}
+    QLineEdit* getCNameLineEdit(){return cNameLineEdit;}
+    QLineEdit* getPathLineEdit(){return pathLineEdit;}
+    QComboBox* getTypeComboBox(){return typeComboBox;}
+    QLineEdit* getShowNameLineEdit(){return showNameLineEdit;}
+    QCheckBox* getParticipleCheckBox(){return participleCheckBox;}
 protected:
-    QLabel* eNameLabel;
-    QLineEdit* eNameLineEidt;
+    QLineEdit* eNameLineEdit;
 
-    QLabel* cNameLabel;
     QLineEdit* cNameLineEdit;
 
-    QLabel* pathLabel;
-    QLineEdit* pathLineEidt;
+    QLineEdit* pathLineEdit;
 
-    QLabel* typeLabel;
     QComboBox* typeComboBox;
 
-    QLabel* showNameLabel;
     QLineEdit* showNameLineEdit;
 
-    QLabel* participleLabel;
     QCheckBox* participleCheckBox;
-
-    QHBoxLayout* layout;
 };
 
 #endif // INDEXWIDGET_H

@@ -3,10 +3,11 @@
 
 #include<QXmlStreamReader>
 #include<QStandardItemModel>
+#include<singleton.h>
 
 class Date;
 
-class XsdAnalyser
+class XsdAnalyser:public Singleton<XsdAnalyser>
 {
 public:
     XsdAnalyser();
@@ -18,6 +19,8 @@ public:
 
     //根据checkstatus创建选择的element的list
     QStandardItemModel *getTable();
+
+    int getVersion(){return version;}
 protected:
     void init();
 
@@ -39,7 +42,6 @@ protected:
     bool analyseElement(Date* parent);
     bool analyseAnnotation(Date* parent);
 
-
     Date* current;
     //数据根
     Date* root;
@@ -49,6 +51,8 @@ protected:
     QXmlStreamReader reader;
     QStandardItemModel* table;
 
+    //版本号，用于和chooseItemDialog同步
+    int version;
 };
 
 #endif // XSDANALYSER_H

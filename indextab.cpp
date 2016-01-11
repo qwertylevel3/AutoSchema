@@ -3,13 +3,11 @@
 #include<QXmlStreamWriter>
 #include<QFile>
 #include<QMessageBox>
+#include<QGridLayout>
 
-
-IndexTab::IndexTab(XsdAnalyser *a, QWidget *parent) :
+IndexTab::IndexTab(QWidget *parent) :
     QWidget(parent)
 {
-    analyser=a;
-
     scrollArea=new QScrollArea(this);
 
     nextButton=new QCommandLinkButton;
@@ -31,9 +29,12 @@ IndexTab::IndexTab(XsdAnalyser *a, QWidget *parent) :
     hLayout->addWidget(scrollArea);
     hLayout->addLayout(vLayout);
 
-
     listWidget=new QWidget();
-    listLayout=new QVBoxLayout();
+    listLayout=new QGridLayout();
+
+
+    addTitle();
+
     listWidget->setLayout(listLayout);
     scrollArea->setWidget(listWidget);
 
@@ -43,14 +44,27 @@ IndexTab::IndexTab(XsdAnalyser *a, QWidget *parent) :
             this,SLOT(createIndex()));
     connect(nextButton,SIGNAL(clicked(bool)),
             this,SLOT(sendNext()));
+
+    dialog=new ChooseItemDialog(this);
 }
 
 void IndexTab::createIndex()
 {
     for(int i=0;i<indexList.size();i++)
     {
-        listLayout->removeWidget(indexList[i]);
+        listLayout->removeWidget(indexList[i]->getENameLineEdit());
+        listLayout->removeWidget(indexList[i]->getCNameLineEdit());
+        listLayout->removeWidget(indexList[i]->getTypeComboBox());
+        listLayout->removeWidget(indexList[i]->getShowNameLineEdit());
+        listLayout->removeWidget(indexList[i]->getParticipleCheckBox());
+        listLayout->removeWidget(indexList[i]->getPathLineEdit());
     }
+    listLayout->removeWidget(eNameLabel);
+    listLayout->removeWidget(cNameLabel);
+    listLayout->removeWidget(pathLabel);
+    listLayout->removeWidget(typeLabel);
+    listLayout->removeWidget(showNameLabel);
+    listLayout->removeWidget(participleLabel);
 
     for (QList<IndexWidget*>::iterator i = indexList.begin();
          i!= indexList.end();i++)
@@ -59,41 +73,43 @@ void IndexTab::createIndex()
     }
     indexList.clear();
 
-
     listWidget=new QWidget();
-    listLayout=new QVBoxLayout();
-
-
-    listWidget->setLayout(listLayout);
-
-
-
-    dialog=new ChooseItemDialog(analyser);
-
-    if(dialog->exec())
+    listLayout=new QGridLayout();
+    for(int i=0;i<6;i++)
     {
-        model=dialog->getModel();
-        for(int i=0;i<model->rowCount();i++)
-        {
-            Element* item=static_cast<Element*>(model->item(i));
-            IndexWidget* indexItem=new IndexWidget(this);
-            indexItem->setENameLabel(item->getName());
-            indexItem->setCNameLabel(item->getId());
-            indexItem->setPathLabel(item->getPath());
-            indexItem->setShowName(item->getId());
-
-            QString annotation;
-            for(int i=0;i<item->getAnnotation().size();i++)\
-            {
-                annotation.append(item->getAnnotation().at(i));
-            }
-            indexItem->setStatusTip(annotation);
-
-            listLayout->addWidget(indexItem);
-            indexList.push_back(indexItem);
-        }
+        listLayout->setColumnMinimumWidth(i,150);
     }
 
+    addTitle();
+
+    dialog->exec();
+    model=dialog->getModel();
+    for(int i=0;i<model->rowCount();i++)
+    {
+        Element* item=static_cast<Element*>(model->item(i));
+        IndexWidget* indexItem=new IndexWidget();
+        indexItem->setENameLabel(item->getName());
+        indexItem->setCNameLabel(item->getId());
+        indexItem->setPathLabel(item->getPath());
+        indexItem->setShowName(item->getId());
+
+        QString annotation;
+        for(int j=0;j<item->getAnnotation().size();j++)\
+        {
+            annotation.append(item->getAnnotation().at(j));
+        }
+        //indexItem->setStatusTip(annotation);
+
+        listLayout->addWidget(indexItem->getENameLineEdit(),i+1,0,1,1);
+        listLayout->addWidget(indexItem->getCNameLineEdit(),i+1,1,1,1);
+        listLayout->addWidget(indexItem->getTypeComboBox(),i+1,2,1,1);
+        listLayout->addWidget(indexItem->getShowNameLineEdit(),i+1,3,1,1);
+        listLayout->addWidget(indexItem->getParticipleCheckBox(),i+1,4,1,1);
+        listLayout->addWidget(indexItem->getPathLineEdit(),i+1,5,1,1);
+
+        indexList.push_back(indexItem);
+    }
+    listWidget->setLayout(listLayout);
     scrollArea->setWidget(listWidget);
 }
 
@@ -135,5 +151,41 @@ void IndexTab::writeFile(const QString &fileName)
     xmlWriter.writeEndDocument();
 
     file.close();
+}
+
+void IndexTab::addTitle()
+{
+    eNameLabel=new QLineEdit();
+    eNameLabel->setText("英文名称");
+    eNameLabel->setEnabled(false);
+
+    cNameLabel=new QLineEdit();
+    cNameLabel->setText("中文名称");
+    cNameLabel->setEnabled(false);
+
+    pathLabel=new QLineEdit();
+    pathLabel->setText("路径");
+    pathLabel->setEnabled(false);
+
+    typeLabel=new QLineEdit();
+    typeLabel->setText("类型");
+    typeLabel->setEnabled(false);
+
+    showNameLabel=new QLineEdit();
+    showNameLabel->setText("showName");
+    showNameLabel->setEnabled(false);
+
+    participleLabel=new QLineEdit();
+    participleLabel->setText("分词");
+    participleLabel->setEnabled(false);
+
+
+    listLayout->addWidget(eNameLabel,0,0,1,1);
+    listLayout->addWidget(cNameLabel,0,1,1,1);
+    listLayout->addWidget(typeLabel,0,2,1,1);
+    listLayout->addWidget(showNameLabel,0,3,1,1);
+    listLayout->addWidget(participleLabel,0,4,1,1);
+    listLayout->addWidget(pathLabel,0,5,1,1);
+
 }
 

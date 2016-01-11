@@ -11,6 +11,7 @@ XsdAnalyser::XsdAnalyser()
     model=0;
     root=0;
     table=0;
+    version=0;
 
     init();
 }
@@ -79,6 +80,10 @@ bool XsdAnalyser::analyse(const QString &fileName)
     meg.exec();
 
     file.close();
+
+    //每次解析一个新文件，版本号+1
+    version++;
+
     return true;
 }
 
@@ -242,4 +247,3 @@ bool XsdAnalyser::parse(const QString &type, Date *parent)
     }
     return true;
 }
-

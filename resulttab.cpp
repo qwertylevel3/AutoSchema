@@ -5,11 +5,9 @@
 #include<QFile>
 #include<QMessageBox>
 
-ResultTab::ResultTab(XsdAnalyser *a, QWidget *parent) :
+ResultTab::ResultTab(QWidget *parent) :
     QWidget(parent)
 {
-    analyser=a;
-
     scrollArea=new QScrollArea();
 
     nextButton=new QCommandLinkButton;
@@ -26,8 +24,6 @@ ResultTab::ResultTab(XsdAnalyser *a, QWidget *parent) :
     vLayout->addStretch();
     vLayout->addWidget(previousButton);
     vLayout->addWidget(nextButton);
-
-
 
     QHBoxLayout* hLayout=new QHBoxLayout();
     hLayout->addWidget(scrollArea);

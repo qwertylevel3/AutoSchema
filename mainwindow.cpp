@@ -21,9 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     tabWidget=new QTabWidget(this);
-    indexTab=new IndexTab(&analyser);
-    resultTab= new ResultTab(&analyser);
-    showDetailTab=new ShowDetailTab(&analyser);
+    indexTab=new IndexTab();
+    resultTab= new ResultTab();
+    showDetailTab=new ShowDetailTab();
 
     tabWidget->addTab(indexTab,"index");
     tabWidget->addTab(resultTab,"result");
@@ -47,12 +47,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::open()
 {
-    QString fileName=QFileDialog::getOpenFileName(this,
-                                                  tr("打开xsd文件"),".",
-                                                  tr("xsd files(*.xsd)"));
+//    QString fileName=QFileDialog::getOpenFileName(this,
+//                                                  tr("打开xsd文件"),".",
+//                                                  tr("xsd files(*.xsd)"));
 
     //debug...
-    //QString fileName="./2015_08_01_15_10_10.xsd";
+    QString fileName="./2015_08_01_15_10_10.xsd";
 
     if(!fileName.isEmpty())
     {
@@ -149,7 +149,7 @@ void MainWindow::createMenus()
 
 bool MainWindow::parseXsd(const QString &fileName)
 {
-    return analyser.analyse(fileName);
+    return XsdAnalyser::instance()->analyse(fileName);
 }
 
 
