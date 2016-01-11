@@ -6,12 +6,12 @@
 ShowDetailItemWidget::ShowDetailItemWidget(QWidget *parent)
     :QWidget(parent)
 {
-    nameLabel=new QLabel();
+    nameLineEdit=new QLineEdit();
     pathLabel=new QLabel();
 
     QHBoxLayout* layout=new QHBoxLayout();
 
-    layout->addWidget(nameLabel);
+    layout->addWidget(nameLineEdit);
     layout->addWidget(pathLabel);
 
     this->setLayout(layout);
@@ -49,11 +49,13 @@ void ShowDetailTableWidget::createTable()
     itemListWidget=new QWidget();
     QVBoxLayout* listLayout=new QVBoxLayout();
     itemListWidget->setLayout(listLayout);
-    ChooseItemDialog dialog;
 
-    if(dialog.exec())
+    dialog.exec();
+
+    QStandardItemModel* model=dialog.getModel();
+    if(model)
     {
-        QStandardItemModel* model=dialog.getModel();
+
         for(int i=0;i<model->rowCount();i++)
         {
             Element* item=static_cast<Element*>(model->item(i));
@@ -64,8 +66,9 @@ void ShowDetailTableWidget::createTable()
             listLayout->addWidget(showDetailItem);
             list.push_back(showDetailItem);
         }
+        scrollArea->setWidget(itemListWidget);
     }
-    scrollArea->setWidget(itemListWidget);
+
 }
 
 

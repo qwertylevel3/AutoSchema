@@ -18,7 +18,7 @@ IndexTab::IndexTab(QWidget *parent) :
     chooseItemButton=new QCommandLinkButton;
     chooseItemButton->setIcon(QIcon(QString(":/resource/add.png")));
     chooseItemButton->setMaximumWidth(120);
-    chooseItemButton->setText(tr("选择index项"));
+    chooseItemButton->setText(tr("添加index项"));
 
     QVBoxLayout* vLayout=new QVBoxLayout();
     vLayout->addWidget(chooseItemButton);
@@ -84,33 +84,37 @@ void IndexTab::createIndex()
 
     dialog->exec();
     model=dialog->getModel();
-    for(int i=0;i<model->rowCount();i++)
+    if(model)
     {
-        Element* item=static_cast<Element*>(model->item(i));
-        IndexWidget* indexItem=new IndexWidget();
-        indexItem->setENameLabel(item->getName());
-        indexItem->setCNameLabel(item->getId());
-        indexItem->setPathLabel(item->getPath());
-        indexItem->setShowName(item->getId());
-
-        QString annotation;
-        for(int j=0;j<item->getAnnotation().size();j++)\
+        for(int i=0;i<model->rowCount();i++)
         {
-            annotation.append(item->getAnnotation().at(j));
+            Element* item=static_cast<Element*>(model->item(i));
+            IndexWidget* indexItem=new IndexWidget();
+            indexItem->setENameLabel(item->getName());
+            indexItem->setCNameLabel(item->getId());
+            indexItem->setPathLabel(item->getPath());
+            indexItem->setShowName(item->getId());
+
+            QString annotation;
+            for(int j=0;j<item->getAnnotation().size();j++)\
+            {
+                annotation.append(item->getAnnotation().at(j));
+            }
+            //indexItem->setStatusTip(annotation);
+
+            listLayout->addWidget(indexItem->getENameLineEdit(),i+1,0,1,1);
+            listLayout->addWidget(indexItem->getCNameLineEdit(),i+1,1,1,1);
+            listLayout->addWidget(indexItem->getTypeComboBox(),i+1,2,1,1);
+            listLayout->addWidget(indexItem->getShowNameLineEdit(),i+1,3,1,1);
+            listLayout->addWidget(indexItem->getParticipleCheckBox(),i+1,4,1,1);
+            listLayout->addWidget(indexItem->getPathLineEdit(),i+1,5,1,1);
+
+            indexList.push_back(indexItem);
         }
-        //indexItem->setStatusTip(annotation);
-
-        listLayout->addWidget(indexItem->getENameLineEdit(),i+1,0,1,1);
-        listLayout->addWidget(indexItem->getCNameLineEdit(),i+1,1,1,1);
-        listLayout->addWidget(indexItem->getTypeComboBox(),i+1,2,1,1);
-        listLayout->addWidget(indexItem->getShowNameLineEdit(),i+1,3,1,1);
-        listLayout->addWidget(indexItem->getParticipleCheckBox(),i+1,4,1,1);
-        listLayout->addWidget(indexItem->getPathLineEdit(),i+1,5,1,1);
-
-        indexList.push_back(indexItem);
+        listWidget->setLayout(listLayout);
+        scrollArea->setWidget(listWidget);
     }
-    listWidget->setLayout(listLayout);
-    scrollArea->setWidget(listWidget);
+
 }
 
 void IndexTab::sendNext()

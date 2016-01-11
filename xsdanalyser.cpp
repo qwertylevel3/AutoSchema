@@ -57,6 +57,7 @@ bool XsdAnalyser::analyse(const QString &fileName)
             if(stack.isEmpty())
             {
                 root->setName(reader.attributes().value("name").toString());
+                root->setText(reader.attributes().value("name").toString());
             }
         }
         else
@@ -90,7 +91,7 @@ bool XsdAnalyser::analyse(const QString &fileName)
 
 Date *XsdAnalyser::clone()
 {
-    Date* newRoot=new Date();
+    Date* newRoot=root->clone();
     clone(root,newRoot);
     return newRoot;
 }
@@ -188,7 +189,7 @@ bool XsdAnalyser::analyseElement(Date* parent)
     t->setName(reader.attributes().value("name").toString());
     t->setId(reader.attributes().value("id").toString());
     t->setType(reader.attributes().value("type").toString());
-    t->setText(t->getName());
+    t->setText(t->getId());
 
     parent->appendRow(t);
 
