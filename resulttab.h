@@ -24,8 +24,14 @@ public slots:
     void sendPrevious();
     void writeFile(const QString& fileName);
 protected:
+    void addTitle();
     QWidget* list;
+    QGridLayout* listLayout;
     QStandardItemModel* model;
+
+    QLineEdit* indexNameLabel;
+    QLineEdit* showNameLabel;
+    QLineEdit* showDetailLabel;
 
     QList<ResultWidget*> resultList;
     QScrollArea* scrollArea;

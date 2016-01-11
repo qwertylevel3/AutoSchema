@@ -9,11 +9,10 @@
 #include<QComboBox>
 #include<QLayout>
 
-class ResultWidget : public QWidget
+class ResultWidget
 {
-    Q_OBJECT
 public:
-    explicit ResultWidget(QWidget *parent = 0);
+    ResultWidget();
 
     void setIndexName(const QString& name);
     void setShowName(const QString& name);
@@ -25,18 +24,16 @@ public:
     QString getShowName(){return showNameLineEdit->text();}
     int getShowDetail(){return showDetailComboBox->currentIndex();}
     int getType(){return type;}
-signals:
 
-public slots:
+    QCheckBox* getCheckBox(){return checkBox;}
+    QLineEdit* getIndexNameLineEdit(){return indexNameLineEdit;}
+    QLineEdit* getShowNameLineEdit(){return showNameLineEdit;}
+    QComboBox* getShowDetailComboBox(){return showDetailComboBox;}
 protected:
     QCheckBox *checkBox;
-    QLabel* indexNameLabel;
     QLineEdit* indexNameLineEdit;
-    QLabel* showNameLabel;
     QLineEdit* showNameLineEdit;
-    QLabel* showDetailLabel;
     QComboBox* showDetailComboBox;
-    QHBoxLayout* layout;
     int type;
 };
 
