@@ -8,6 +8,8 @@
 #include"indextab.h"
 #include"resulttab.h"
 #include"showdetailtab.h"
+#include<QPlainTextEdit>
+
 namespace Ui {
 class MainWindow;
 }
@@ -28,6 +30,7 @@ private slots:
     void showDetailToResult();
 
     void complete();
+    void setTip(const QString& tip);
 private:
     void createActions();
     void createMenus();
@@ -47,6 +50,9 @@ private:
     IndexTab* indexTab;
     ResultTab* resultTab;
     ShowDetailTab* showDetailTab;
+
+    //说明栏
+    QPlainTextEdit* tipsTextEdit;
 
     Ui::MainWindow *ui;
 };

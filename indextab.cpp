@@ -4,6 +4,7 @@
 #include<QFile>
 #include<QMessageBox>
 #include<QGridLayout>
+#include<tipmanager.h>
 
 IndexTab::IndexTab(QWidget *parent) :
     QWidget(parent)
@@ -100,9 +101,11 @@ void IndexTab::createIndex()
             {
                 annotation.append(item->getAnnotation().at(j));
             }
-            //indexItem->setStatusTip(annotation);
 
             listLayout->addWidget(indexItem->getENameLineEdit(),i+1,0,1,1);
+            indexItem->getENameLineEdit()->setToolTip(TipManager::instance()->getIndex_eName());
+            indexItem->getENameLineEdit()->setMouseTracking(true);
+
             listLayout->addWidget(indexItem->getCNameLineEdit(),i+1,1,1,1);
             listLayout->addWidget(indexItem->getTypeComboBox(),i+1,2,1,1);
             listLayout->addWidget(indexItem->getShowNameLineEdit(),i+1,3,1,1);
@@ -155,6 +158,11 @@ void IndexTab::writeFile(const QString &fileName)
     xmlWriter.writeEndDocument();
 
     file.close();
+}
+
+void IndexTab::sendTip(QString widgetTip)
+{
+    emit tip(widgetTip);
 }
 
 void IndexTab::addTitle()

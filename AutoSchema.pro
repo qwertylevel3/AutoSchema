@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     showdetailwidget.cpp \
     resulttab.cpp \
     showdetailtab.cpp \
-    inputiddialog.cpp
+    inputiddialog.cpp \
+    tipmanager.cpp
 
 HEADERS  += mainwindow.h \
     chooseitemdialog.h \
@@ -45,7 +46,8 @@ HEADERS  += mainwindow.h \
     resulttab.h \
     showdetailtab.h \
     inputiddialog.h \
-    singleton.h
+    singleton.h \
+    tipmanager.h
 
 FORMS    += mainwindow.ui \
     chooseitemdialog.ui \

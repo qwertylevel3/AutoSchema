@@ -8,6 +8,7 @@
 #include"date/date.h"
 #include"indexwidget.h"
 #include<QMessageBox>
+#include"tipmanager.h"
 #include"inputiddialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -29,6 +30,18 @@ MainWindow::MainWindow(QWidget *parent) :
     tabWidget->addTab(resultTab,"result");
     tabWidget->addTab(showDetailTab,"showDetail");
 
+    //tipsTextEdit=new QPlainTextEdit();
+    //tipsTextEdit->setEnabled(false);
+    //tipsTextEdit->setMaximumHeight(100);
+
+    //QVBoxLayout* vLayout=new QVBoxLayout();
+    //vLayout->addWidget(tabWidget);
+    //vLayout->addWidget(tipsTextEdit);
+
+    //QWidget* mainWidget=new QWidget();
+
+    //mainWidget->setLayout(vLayout);
+
     this->setCentralWidget(tabWidget);
 
     setTab(0);
@@ -38,6 +51,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(resultTab,SIGNAL(previous()),this,SLOT(resultToindex()));
     connect(showDetailTab,SIGNAL(previous()),this,SLOT(showDetailToResult()));
     connect(showDetailTab,SIGNAL(complete()),this,SLOT(complete()));
+
+    //connect(indexTab,SIGNAL(tip(QString)),this,SLOT(setTip(QString)));
+
+    TipManager::instance()->init();
+
+    setWindowState(Qt::WindowMaximized);
 }
 
 MainWindow::~MainWindow()
@@ -47,12 +66,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::open()
 {
-//    QString fileName=QFileDialog::getOpenFileName(this,
-//                                                  tr("打开xsd文件"),".",
-//                                                  tr("xsd files(*.xsd)"));
+    QString fileName=QFileDialog::getOpenFileName(this,
+                                                  tr("打开xsd文件"),".",
+                                                  tr("xsd files(*.xsd)"));
 
     //debug...
-    QString fileName="./2015_08_01_15_10_10.xsd";
+    //QString fileName="./2015_08_01_15_10_10.xsd";
 
     if(!fileName.isEmpty())
     {
@@ -122,6 +141,11 @@ void MainWindow::complete()
                              tr("文件已写入当前文件夹下"),
                              QMessageBox::Ok);
     }
+}
+
+void MainWindow::setTip(const QString &tip)
+{
+    tipsTextEdit->setPlainText(tip);
 }
 
 

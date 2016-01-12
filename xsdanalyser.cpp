@@ -35,6 +35,9 @@ bool XsdAnalyser::analyse(const QString &fileName)
 
     //过滤schema项
     reader.readNextStartElement();
+    while (reader.name()!="schema") {
+        reader.readNextStartElement();
+    }
 
     //当前指针
     current=root;
