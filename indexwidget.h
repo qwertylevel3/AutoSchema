@@ -9,6 +9,24 @@
 #include<QLayout>
 #include<QLayoutItem>
 
+//class LineEdit : public QLineEdit
+//{
+//    Q_OBJECT
+//
+//public:
+//    LineEdit(QLineEdit *parent=0);
+//    ~LineEdit(){}
+//    void setTip(const QString& t){tip=t;}
+//
+//    QString getTip(){return tip;}
+//signals:
+//    void tipMessage(QString tip);
+//protected:
+//    QString tip;
+//    void mouseMoveEvent(QMouseEvent* event);
+//};
+//
+
 class IndexWidget
 {
 public:
@@ -36,15 +54,10 @@ public:
     QCheckBox* getParticipleCheckBox(){return participleCheckBox;}
 protected:
     QLineEdit* eNameLineEdit;
-
     QLineEdit* cNameLineEdit;
-
     QLineEdit* pathLineEdit;
-
     QComboBox* typeComboBox;
-
     QLineEdit* showNameLineEdit;
-
     QCheckBox* participleCheckBox;
 };
 

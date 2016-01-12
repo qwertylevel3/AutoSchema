@@ -9,6 +9,8 @@
 #include<QComboBox>
 #include<QLayout>
 
+
+
 class ResultWidget
 {
 public:

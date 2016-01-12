@@ -19,10 +19,12 @@ public:
     QList<IndexWidget*>& getList(){return indexList;}
 signals:
     void next();
+    void tip(QString tip);
 public slots:
     void createIndex();
     void sendNext();
     void writeFile(const QString& fileName);
+    void sendTip(QString widgetTip);
 protected:
     void addTitle();
     QStandardItemModel* model;

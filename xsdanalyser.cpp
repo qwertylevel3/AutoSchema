@@ -35,14 +35,33 @@ bool XsdAnalyser::analyse(const QString &fileName)
 
     //过滤schema项
     reader.readNextStartElement();
+    while (reader.name()!="schema") {
+        reader.readNextStartElement();
+    }
+
+    //stack.push(QString("element"));
 
     //当前指针
     current=root;
 
+    //第一步push，防止第一个就是element直接结束
+    reader.readNextStartElement();
+    QString temp=reader.name().toString();
+
+    if(temp!="annotation")
+    {
+        stack.push(temp);
+    }
+    if(!parse(temp,current))
+    {
+        file.close();
+        return false;
+    }
+
     while(!reader.atEnd() && !stack.empty())
     {
         reader.readNextStartElement();
-        QString temp=reader.name().toString();
+        temp=reader.name().toString();
 
         if(temp==stack.top())
         {
@@ -189,7 +208,7 @@ bool XsdAnalyser::analyseElement(Date* parent)
     t->setName(reader.attributes().value("name").toString());
     t->setId(reader.attributes().value("id").toString());
     t->setType(reader.attributes().value("type").toString());
-    t->setText(t->getId());
+    t->setText(t->getId()+t->getName());
 
     parent->appendRow(t);
 

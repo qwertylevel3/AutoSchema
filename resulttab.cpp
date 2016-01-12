@@ -95,14 +95,17 @@ void ResultTab::writeFile(const QString &fileName)
 
     for(int i=0;i<resultList.size();i++)
     {
-        xmlWriter.writeStartElement("result");
+        if(resultList[i]->getCheckBox()->checkState()==Qt::Checked)
+        {
+            xmlWriter.writeStartElement("result");
 
-        xmlWriter.writeTextElement("indexName",resultList[i]->getIndexName());
-        xmlWriter.writeTextElement("showName",resultList[i]->getShowName());
-        xmlWriter.writeTextElement("type",QString::number(resultList[i]->getType()));
-        xmlWriter.writeTextElement("showdetail",QString::number(resultList[i]->getShowDetail()));
+            xmlWriter.writeTextElement("indexName",resultList[i]->getIndexName());
+            xmlWriter.writeTextElement("showName",resultList[i]->getShowName());
+            xmlWriter.writeTextElement("type",QString::number(resultList[i]->getType()));
+            xmlWriter.writeTextElement("showdetail",QString::number(resultList[i]->getShowDetail()));
 
-        xmlWriter.writeEndElement();
+            xmlWriter.writeEndElement();
+        }
     }
 
     xmlWriter.writeEndDocument();
